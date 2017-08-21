@@ -418,12 +418,21 @@ After this, the program reads the input from the file
 そうすると、以後ファイル''input.txt''を入力、''output.txt''を出力とし、普通に標準ストリームを利用可能になる。
 
 
+\begin{comment}
 \section{Working with numbers}
 
 \index{integer}
 
 \subsubsection{Integers}
+\end{comment}
 
+\section{数の扱い}
+
+\index{整数}
+
+\subsubsection{整数}
+
+\begin{comment}
 The most used integer type in competitive programming
 is \texttt{int}, which is a 32-bit type with
 a value range of $-2^{31} \ldots 2^{31}-1$
@@ -446,6 +455,21 @@ is that the type \texttt{int} is still used somewhere
 in the code.
 For example, the following code contains
 a subtle error:
+\end{comment}
+
+競技プログラミングで最も使われる整数（\key{integer}）型は\texttt{int}型である。
+この型は32bit長で、$-2^{31} \ldots 2^{31}-1$、すなわち約$-2 \cdot 10^9 \ldots 2 \cdot 10^9$の範囲の整数を表せる。
+\texttt{int}型で不足するならば64bit型の\texttt{long long}を利用できる。
+こちらは$-2^{63} \ldots 2^{63}-1$、すなわち約$-9 \cdot 10^{18} \ldots 9 \cdot 10^{18}$の範囲の整数を表せる。
+
+以下のコードは\texttt{long long}型変数を定義する:
+\begin{lstlisting}
+long long x = 123456789123456789LL;
+\end{lstlisting}
+末尾の\texttt{LL}はこの定数が\texttt{long long}型であることを示す。
+
+\texttt{long long}型を扱う場合に起こしがちな誤りとして、\texttt{int}型と混在してしまうことがある。
+例えば以下のコードは想定外のバグを含んでいる:
 
 \begin{lstlisting}
 int a = 123456789;
@@ -453,6 +477,7 @@ long long b = a*a;
 cout << b << "\n"; // -1757895751
 \end{lstlisting}
 
+\begin{comment}
 Even though the variable \texttt{b} is of type \texttt{long long},
 both numbers in the expression \texttt{a*a}
 are of type \texttt{int} and the result is
@@ -471,12 +496,34 @@ a 128-bit type \texttt{\_\_int128\_t}
 with a value range of
 $-2^{127} \ldots 2^{127}-1$ or about $-10^{38} \ldots 10^{38}$.
 However, this type is not available in all contest systems.
+\end{comment}
 
+変数\texttt{b}は\texttt{long long}型であるが、式\texttt{a*a}中の数はいずれも
+\texttt{int}型であり、演算結果も\texttt{int}同様に型となる。
+そのため変数\texttt{b}は誤った結果を含む。
+この問題は、変数\texttt{a}を\texttt{long long}型にするか、式を
+キャストを用いて\texttt{(long long)a*a}に書き換えることで解決できる。
+
+通常コンテストの問題は\texttt{long long}型で足りるようにできている。
+しかしそれでも足りない場合に備え、\texttt{g++}コンパイラは128bit整数である
+\texttt{\_\_int128\_t}型を提供していることを知っておくとよい。
+この型は$-2^{127} \ldots 2^{127}-1$、すなわち約$-10^{38} \ldots 10^{38}$.の範囲を表せる。
+しかし、この型はすべてのコンテストで利用可能ではない。
+（訳注:32bit g++を用いるCodeForces等では利用できない）
+
+\begin{comment}
 \subsubsection{Modular arithmetic}
 
 \index{remainder}
 \index{modular arithmetic}
+\end{comment}
 
+\subsubsection{モジュロ演算}
+
+\index{剰余}
+\index{モジュロ演算}
+
+\begin{comment}
 We denote by $x \bmod m$ the remainder
 when $x$ is divided by $m$.
 For example, $17 \bmod 5 = 2$,
@@ -491,10 +538,25 @@ The idea is that even if the actual answer
 is very large,
 it suffices to use the types
 \texttt{int} and \texttt{long long}.
+\end{comment}
 
+$x \bmod m$を$x$を$m$で割ったときの余りとして定義する。
+例えば$17 = 3 \cdot 5 + 2$なので$17 \bmod 5 = 2$である。
+
+しばしば解が非常に大きな数値になる問題において、
+$m$の剰余を答えるよう指示されることがある。
+（例: ''$10^9+7$の剰余を出力せよ''）
+これにより、実際の解はとても大きくても、プログラム中では\texttt{int}型や
+\texttt{long long}型の範囲で対応できる。
+
+\begin{comment}
 An important property of the remainder is that
 in addition, subtraction and multiplication,
 the remainder can be taken before the operation:
+\end{comment}
+
+剰余の重要な性質として、和・差・積を剰余を取る前後
+どちらに行っても値が一致するというものがある。
 
 \[
 \begin{array}{rcr}
@@ -504,11 +566,19 @@ the remainder can be taken before the operation:
 \end{array}
 \]
 
+\begin{comment}
 Thus, we can take the remainder after every operation
 and the numbers will never become too large.
 
 For example, the following code calculates $n!$,
 the factorial of $n$, modulo $m$:
+\end{comment}
+
+そのため、我々はこれらの演算の前に毎回剰余を取ることで、
+数が大きくなり過ぎないようにすることができる。
+
+例えば、下記コードは$n!$（$n$の階乗）の$m$の剰余を求める:
+
 \begin{lstlisting}
 long long x = 1;
 for (int i = 2; i <= n; i++) {
@@ -517,6 +587,7 @@ for (int i = 2; i <= n; i++) {
 cout << x%m << "\n";
 \end{lstlisting}
 
+\begin{comment}
 Usually we want the remainder to always
 be between $0\ldots m-1$.
 However, in C++ and other languages,
@@ -533,11 +604,31 @@ if (x < 0) x += m;
 However, this is only needed when there
 are subtractions in the code and the
 remainder may become negative.
+\end{comment}
 
+通常我々は剰余が$0\ldots m-1$の範囲に収まることを期待する。
+しかし、C++含め一部の言語では、負の値の剰余は0または負になってしまう。
+剰余が非負であることを確実にするためには、求めた剰余が負の場合
+$m$を加えればよい:
+\begin{lstlisting}
+x = x%m;
+if (x < 0) x += m;
+\end{lstlisting}
+この処理は、コード中で減算を行うなど剰余が負になりうる場合でのみ行えばよい。
+
+\begin{comment}
 \subsubsection{Floating point numbers}
 
 \index{floating point number}
+\end{comment}
 
+\subsubsection{小数}
+
+\index{小数}
+\index{浮動小数点数}
+
+
+\begin{comment}
 The usual floating point types in
 competitive programming are
 the 64-bit \texttt{double}
@@ -554,23 +645,39 @@ and give the number of decimal places
 in the formatting string.
 For example, the following code prints
 the value of $x$ with 9 decimal places:
+\end{comment}
+
+競技プログラミングで用いられる浮動小数点数（\key{floating point number}、以下単に小数と訳す）の型は
+64-bitの\texttt{double}型と、\texttt{g++}コンパイラの独自拡張である80-bitの\texttt{long double}型である。
+ほとんどのケースは前者で十分だが、精度を高めるために後者を利用することもできる。
+
+解の精度は問題文中で与えられるのが一般的である。
+解の出力には、\texttt{printf}で小数点以降の桁数を指定するのが簡単である。
+例えば以下のコードは小数$x$を小数点以下第9位まで出力する:
 
 \begin{lstlisting}
 printf("%.9f\n", x);
 \end{lstlisting}
 
+\begin{comment}
 A difficulty when using floating point numbers
 is that some numbers cannot be represented
 accurately as floating point numbers,
 and there will be rounding errors.
 For example, the result of the following code
 is surprising:
+\end{comment}
+
+小数を扱う場合の難しさは、値によって正確に表現できず、
+真の値と格納した値で丸め誤差を生じることである。
+例えば以下のコードの出力は驚くべきものとなる:
 
 \begin{lstlisting}
 double x = 0.3*3+0.1;
 printf("%.20f\n", x); // 0.99999999999999988898
 \end{lstlisting}
 
+\begin{comment}
 Due to a rounding error,
 the value of \texttt{x} is a bit smaller than 1,
 while the correct value would be 1.
@@ -583,9 +690,21 @@ A better way to compare floating point numbers
 is to assume that two numbers are equal
 if the difference between them is less than $\varepsilon$,
 where $\varepsilon$ is a small number.
+\end{comment}
 
+丸め誤差のため、\texttt{x}の値は真の計算結果1よりもわずかに小さくなる。
+
+計算過程でこのような丸め誤差が生じるため、2つの小数を\texttt{==}演算子で比較することは
+危険である。
+小数比較のより良い方法は、差の絶対値がが十分に小さい値$\varepsilon$未満なら
+等しい、とみなすことである。
+
+\begin{comment}
 In practice, the numbers can be compared
 as follows ($\varepsilon=10^{-9}$):
+\end{comment}
+
+実際には小数値は以下のように比較できる($\varepsilon=10^{-9}$):
 
 \begin{lstlisting}
 if (abs(a-b) < 1e-9) {
@@ -593,13 +712,20 @@ if (abs(a-b) < 1e-9) {
 }
 \end{lstlisting}
 
+\begin{comment}
 Note that while floating point numbers are inaccurate,
 integers up to a certain limit can still be
 represented accurately.
 For example, using \texttt{double},
 it is possible to accurately represent all
 integers whose absolute value is at most $2^{53}$.
+\end{comment}
 
+小数は不正確であるが、上限以下の整数については正確に保持できることは
+覚えておくとよい。
+例えば\texttt{double}型は絶対値$2^{53}$未満の整数は正確な値を保持できる。
+
+\begin{comment}
 \section{Shortening code}
 
 Short code is ideal in competitive programming,
@@ -607,7 +733,14 @@ because programs should be written
 as fast as possible.
 Because of this, competitive programmers often define
 shorter names for datatypes and other parts of code.
+\end{comment}
 
+\section{コードの短縮}
+
+競技プログラミングにおいては、プログラムをできるだけ素早く書くため、短いコードは利用的である。
+そのため競技プログラマはしばしば型名やその他の部分で短い別名を使う。
+
+\begin{comment}
 \subsubsection{Type names}
 \index{tuppdef@\texttt{typedef}}
 Using the command \texttt{typedef}
@@ -630,18 +763,50 @@ ll a = 123456789;
 ll b = 987654321;
 cout << a*b << "\n";
 \end{lstlisting}
+\end{comment}
 
+\subsubsection{型名}
+\index{tuppdef@\texttt{typedef}}
+
+\texttt{typedef}コマンドはデータ型に短い別名を与えることができる。
+例えば\texttt{long long}は長いため、\texttt{ll}を与えることができる:
+\begin{lstlisting}
+typedef long long ll;
+\end{lstlisting}
+
+以後、以下のコードは:
+\begin{lstlisting}
+long long a = 123456789;
+long long b = 987654321;
+cout << a*b << "\n";
+\end{lstlisting}
+
+以下のように短くできる:
+\begin{lstlisting}
+ll a = 123456789;
+ll b = 987654321;
+cout << a*b << "\n";
+\end{lstlisting}
+
+\begin{comment}
 The command \texttt{typedef}
 can also be used with more complex types.
 For example, the following code gives
 the name \texttt{vi} for a vector of integers
 and the name \texttt{pi} for a pair
 that contains two integers.
+\end{comment}
+
+\texttt{typedef}はより複雑な型にも適用できる。
+例えば下記のコードは整数値のvectorに\texttt{vi}、
+2つの整数のpairに\texttt{pi}という別名を与える:
+
 \begin{lstlisting}
 typedef vector<int> vi;
 typedef pair<int,int> pi;
 \end{lstlisting}
 
+\begin{comment}
 \subsubsection{Macros}
 \index{macro}
 Another way to shorten code is to define
@@ -650,7 +815,15 @@ A macro means that certain strings in
 the code will be changed before the compilation.
 In C++, macros are defined using the
 \texttt{\#define} keyword.
+\end{comment}
 
+\subsubsection{マクロ}
+\index{マクロ}
+コードを短縮する別の手法に\key{マクロ}がある。
+マクロはある文字列をコンパイル前に変換する機能である。
+C++では、マクロは\texttt{\#define}キーワードを用いて定義する。
+
+\begin{comment}
 For example, we can define the following macros:
 \begin{lstlisting}
 #define F first
@@ -670,7 +843,32 @@ v.PB(MP(y1,x1));
 v.PB(MP(y2,x2));
 int d = v[i].F+v[i].S;
 \end{lstlisting}
+\end{comment}
 
+例えば、以下のマクロを定義する:
+\begin{lstlisting}
+#define F first
+#define S second
+#define PB push_back
+#define MP make_pair
+\end{lstlisting}
+
+以後、以下のコードは:
+\begin{lstlisting}
+v.push_back(make_pair(y1,x1));
+v.push_back(make_pair(y2,x2));
+int d = v[i].first+v[i].second;
+\end{lstlisting}
+
+このように短縮できる:
+\begin{lstlisting}
+v.PB(MP(y1,x1));
+v.PB(MP(y2,x2));
+int d = v[i].F+v[i].S;
+\end{lstlisting}
+
+
+\begin{comment}
 A macro can also have parameters
 which makes it possible to shorten loops and other
 structures.
@@ -690,7 +888,27 @@ REP(i,1,n) {
     search(i);
 }
 \end{lstlisting}
+\end{comment}
 
+マクロはパラメータを取れるので、ループの短縮などに利用できる。
+例えば以下のマクロを定義すると:
+\begin{lstlisting}
+#define REP(i,a,b) for (int i = a; i <= b; i++)
+\end{lstlisting}
+以後以下のようなコードは:
+\begin{lstlisting}
+for (int i = 1; i <= n; i++) {
+    search(i);
+}
+\end{lstlisting}
+このように短縮できる:
+\begin{lstlisting}
+REP(i,1,n) {
+    search(i);
+}
+\end{lstlisting}
+
+\begin{comment}
 Sometimes macros cause bugs that may be difficult
 to detect. For example, consider the following macro
 that calculates the square of a number:
@@ -706,7 +924,24 @@ corresponds to the code
 \begin{lstlisting}
 cout << 3+3*3+3 << "\n"; // 15
 \end{lstlisting}
+\end{comment}
 
+マクロはしばしば原因特定が難しいバグの要因となる。
+例えば数値の二乗を返す以下のマクロを考える:
+\begin{lstlisting}
+#define SQ(a) a*a
+\end{lstlisting}
+このマクロは想定通りには\emph{動かない場合がある}。
+例えば下記コードは:
+\begin{lstlisting}
+cout << SQ(3+3) << "\n";
+\end{lstlisting}
+このように変換される:
+\begin{lstlisting}
+cout << 3+3*3+3 << "\n"; // 15
+\end{lstlisting}
+
+\begin{comment}
 A better version of the macro is as follows:
 \begin{lstlisting}
 #define SQ(a) (a)*(a)
@@ -719,8 +954,22 @@ corresponds to the code
 \begin{lstlisting}
 cout << (3+3)*(3+3) << "\n"; // 36
 \end{lstlisting}
+\end{comment}
 
+より良い定義方法は下記のとおりである:
+\begin{lstlisting}
+#define SQ(a) (a)*(a)
+\end{lstlisting}
+すると以下のコードは:
+\begin{lstlisting}
+cout << SQ(3+3) << "\n";
+\end{lstlisting}
+このように変換され、正しい値が得られる。
+\begin{lstlisting}
+cout << (3+3)*(3+3) << "\n"; // 36
+\end{lstlisting}
 
+\begin{comment}
 \section{Mathematics}
 
 Mathematics plays an important role in competitive
@@ -730,7 +979,15 @@ having good mathematical skills.
 This section discusses some important
 mathematical concepts and formulas that
 are needed later in the book.
+\end{comment}
 
+\section{数学}
+
+数学は競技プログラミングにおける重要な素養であり、
+それなしに競技プログラミングで成功することはできない。
+この章では、本書で以後登場する数学の重要な概念と公式について論ずる。
+
+\begin{comment}
 \subsubsection{Sum formulas}
 
 Each sum of the form
@@ -744,7 +1001,23 @@ but it is too complex to be presented here.},
 \[\sum_{x=1}^n x = 1+2+3+\ldots+n = \frac{n(n+1)}{2}\]
 and
 \[\sum_{x=1}^n x^2 = 1^2+2^2+3^2+\ldots+n^2 = \frac{n(n+1)(2n+1)}{6}.\]
+\end{comment}
 
+\subsubsection{総和に関する公式}
+
+正整数$k$に対する \[\sum_{x=1}^n x^k = 1^k+2^k+3^k+\ldots+n^k,\] の形の総和は、
+次数$k+1$の多項式の形の閉形式となる。
+
+例えば
+\[\sum_{x=1}^n x = 1+2+3+\ldots+n = \frac{n(n+1)}{2}\]
+であり
+\[\sum_{x=1}^n x^2 = 1^2+2^2+3^2+\ldots+n^2 = \frac{n(n+1)(2n+1)}{6}.\]
+となる。
+\footnote{\index{Faulhaber's formula}
+これらの総和の式には、\key{Faulhaber's formula}と呼ばれる一般形式があるが
+上級者向けの内容なのでここでは割愛する。},
+
+\begin{comment}
 An \key{arithmetic progression} is a \index{arithmetic progression}
 sequence of numbers
 where the difference between any two consecutive
@@ -763,7 +1036,22 @@ For example,
 The formula is based on the fact
 that the sum consists of $n$ numbers and
 the value of each number is $(a+b)/2$ on average.
+\end{comment}
 
+等差数列(\key{arithmetic progression}\index{arithmetic progression}）とは
+連続する要素の差（公差）が等しい数列である。
+例えば,
+\[3, 7, 11, 15\]
+は公差4の等差数列である。
+等差数列の総和は下記の式で計算できる:
+\[\underbrace{a + \cdots + b}_{n \,\, \textrm{numbers}} = \frac{n(a+b)}{2}\]
+
+$a$は初項、$b$は最後の項、$n$は要素数を示す。
+例えば
+\[3+7+11+15=\frac{4 \cdot (3+15)}{2} = 36.\]
+この式は、$n$要素の平均値が$(a+b)/2$であることに基づく。
+
+\begin{comment}
 \index{geometric progression}
 A \key{geometric progression} is a sequence
 of numbers
@@ -780,7 +1068,20 @@ $b$ is the last number and the
 ratio between consecutive numbers is $k$.
 For example,
 \[3+6+12+24=\frac{24 \cdot 2 - 3}{2-1} = 45.\]
+\end{comment}
 
+等比数列（\key{geometric progression}\index{geometric progression}）とは、
+連続する要素の比（公比）が等しい数列である。
+\[3,6,12,24\]
+は公比2の等比数列である。
+等比数列の総和は下記の式で計算できる:
+\[a + ak + ak^2 + \cdots + b = \frac{bk-a}{k-1}\]
+$a$は初項、$b$は最後の項、$k$は公比を示す。
+例えば
+\[3+6+12+24=\frac{24 \cdot 2 - 3}{2-1} = 45.\]
+となる。
+
+\begin{comment}
 This formula can be derived as follows. Let
 \[ S = a + ak + ak^2 + \cdots + b .\]
 By multiplying both sides by $k$, we get
@@ -791,7 +1092,19 @@ yields the formula.
 
 A special case of a sum of a geometric progression is the formula
 \[1+2+4+8+\ldots+2^{n-1}=2^n-1.\]
+\end{comment}
 
+この式は以下のように導ける。まず以下を定義する:
+\[ S = a + ak + ak^2 + \cdots + b .\]
+両辺を$k$倍すると以下のようになり:
+\[ kS = ak + ak^2 + ak^3 + \cdots + bk,\]
+以下の式が得られる:
+\[ kS-S = bk-a\]
+
+等比数列のよくある値として、以下は覚えておくとよい。
+\[1+2+4+8+\ldots+2^{n-1}=2^n-1.\]
+
+\begin{comment}
 \index{harmonic sum}
 
 A \key{harmonic sum} is a sum of the form
@@ -808,8 +1121,26 @@ the sum as follows:
 This upper bound consists of $\log_2(n)+1$ parts
 ($1$, $2 \cdot 1/2$, $4 \cdot 1/4$, etc.),
 and the value of each part is at most 1.
+\end{comment}
 
+\index{調和級数}
+
+調和級数（\key{harmonic sum}）は以下の形の総和である:
+\[ \sum_{x=1}^n \frac{1}{x} = 1+\frac{1}{2}+\frac{1}{3}+\ldots+\frac{1}{n}.\]
+
+この調和級数の上界は$\log_2(n)+1$である。
+これは、各項$1/k$をにおける$k$を、$k$を超えない$k$に最も近い2の累乗に置き換えることで確認できる。
+例えば$n=6$において、この調和級数は以下のようになる:
+\[ 1+\frac{1}{2}+\frac{1}{3}+\frac{1}{4}+\frac{1}{5}+\frac{1}{6} \le
+1+\frac{1}{2}+\frac{1}{2}+\frac{1}{4}+\frac{1}{4}+\frac{1}{4}.\]
+この上界は$\log_2(n)+1$個の部分に分けられ($1$, $2 \cdot 1/2$, $4 \cdot 1/4$, 以下同様)、個々の総和は1以下である。
+,
+
+\begin{comment}
 \subsubsection{Set theory}
+\end{comment}
+
+\subsubsection{集合論}
 
 \index{set theory}
 \index{set}
@@ -820,6 +1151,17 @@ and the value of each part is at most 1.
 \index{universal set}
 \index{complement}
 
+
+\index{集合論}
+\index{集合}
+\index{共通部分}
+\index{和集合}
+\index{差集合}
+\index{部分集合}
+\index{全体集合}
+\index{補集合}
+
+\begin{comment}
 A \key{set} is a collection of elements.
 For example, the set
 \[X=\{2,4,7\}\]
@@ -828,14 +1170,31 @@ The symbol $\emptyset$ denotes an empty set,
 and $|S|$ denotes the size of a set $S$,
 i.e., the number of elements in the set.
 For example, in the above set, $|X|=3$.
+\end{comment}
 
+集合(\key{set})とは要素のあつまりである。
+例えば集合
+\[X=\{2,4,7\}\]
+は要素2,4,7を含む。
+記号$\emptyset$は空集合を意味する。
+$|S|$は集合$S$の大きさ、すなわち要素数を意味する。
+上記の例でいえば$|X|=3$である。
+
+\begin{comment}
 If a set $S$ contains an element $x$,
 we write $x \in S$,
 and otherwise we write $x \notin S$.
 For example, in the above set
 \[4 \in X \hspace{10pt}\textrm{and}\hspace{10pt} 5 \notin X.\]
+\end{comment}
+
+集合$S$が要素$x$を含むことを、$x \in S$と表し、そうでない場合$x \notin S$と表す。
+例えば上記集合において
+\[4 \in X \hspace{10pt}\textrm{and}\hspace{10pt} 5 \notin X.\]
 
 \begin{samepage}
+
+\begin{comment}
 New sets can be constructed using set operations:
 \begin{itemize}
 \item The \key{intersection} $A \cap B$ consists of elements
@@ -858,8 +1217,29 @@ Note that $B$ can contain elements that are not in $A$.
 For example, if $A=\{2,3,7,8\}$ and $B=\{3,5,8\}$,
 then $A \setminus B = \{2,7\}$.
 \end{itemize}
+\end{comment}
+
+集合に対する演算により、新たな集合を作成できる。
+\begin{itemize}
+\item 共通部分(\key{intersection}） $A \cap B$ は、$A$と$B$両方に含まれる
+要素のみで構成された集合である。
+例えば、$A=\{1,2,5\}$で$B=\{2,4\}$のとき、$A \cap B = \{2\}$である。
+\item 和集合（\key{union}） $A \cup B$ は、$A$と$B$のいずれか片方または
+両方に含まれる要素のみで構成された集合である。
+例えば、$A=\{3,7\}$で$B=\{2,3,8\}$のとき、$A \cup B = \{2,3,7,8\}$である。
+\item 補集合（\key{complement}） $\bar A$ は$S$に含まれない要素のみで
+構成された集合である。
+補集合の概念はすべてのありうる要素を含む全集合（\key{universal set}）によって定まる。
+例えば、$A=\{1,2,5,7\}$で全集合が$\{1,2,\ldots,10\}$のとき、$\bar A = \{3,4,6,8,9,10\}$となる。
+\item 差（\key{difference}） $A \setminus B = A \cap \bar B$は
+$A$に含まれるが$B$に含まれない要素のみで構成された集合である。
+$B$自体は$A$に含まれない要素を含んでいてもよいことに注意すること。
+例えば$A=\{2,3,7,8\}$で$B=\{3,5,8\}$のとき、$A \setminus B = \{2,7\}$である。
+\end{itemize}
+
 \end{samepage}
 
+\begin{comment}
 If each element of $A$ also belongs to $S$,
 we say that $A$ is a \key{subset} of $S$,
 denoted by $A \subset S$.
@@ -870,7 +1250,17 @@ For example, the subsets of the set $\{2,4,7\}$ are
 $\emptyset$,
 $\{2\}$, $\{4\}$, $\{7\}$, $\{2,4\}$, $\{2,7\}$, $\{4,7\}$ and $\{2,4,7\}$.
 \end{center}
+\end{comment}
 
+$A$の各要素が$S$にも含まれている場合、$A$を$S$の部分集合（\key{subset}）と呼ぶ。
+集合$S$に対して、空集合を含め$2^{|S|}$通りの部分集合が存在する。 
+例えば集合$\{2,4,7\}$の部分集合は下記のとおりである:
+\begin{center}
+$\emptyset$,
+$\{2\}$, $\{4\}$, $\{7\}$, $\{2,4\}$, $\{2,7\}$, $\{4,7\}$ and $\{2,4,7\}$.
+\end{center}
+
+\begin{comment}
 Some often used sets are
 $\mathbb{N}$ (natural numbers),
 $\mathbb{Z}$ (integers),
@@ -881,7 +1271,20 @@ can be defined in two ways, depending
 on the situation:
 either $\mathbb{N}=\{0,1,2,\ldots\}$
 or $\mathbb{N}=\{1,2,3,...\}$.
+\end{comment}
 
+しばしば使われる集合として、
+$\mathbb{N}$ (自然数),
+$\mathbb{Z}$ (整数),
+$\mathbb{Q}$ (有理数),
+$\mathbb{R}$ (実数)
+がある。
+$\mathbb{N}$は$\mathbb{N}=\{0,1,2,\ldots\}$と$\mathbb{N}=\{1,2,3,\ldots\}$の
+2通りの定義があり、状況によって使い分けられる。
+
+
+
+\begin{comment}
 We can also construct a set using a rule of the form
 \[\{f(n) : n \in S\},\]
 where $f(n)$ is some function.
@@ -890,8 +1293,19 @@ where $n$ is an element in $S$.
 For example, the set
 \[X=\{2n : n \in \mathbb{Z}\}\]
 contains all even integers.
+\end{comment}
 
+集合の構成法として、関数$f(n)$を用いた内包形式もある:
+\[\{f(n) : n \in S\},\]
+これは、$S$の各要素$n$に対し$f(n)$で構成される要素ならなる集合である。
+例えば以下の集合はすべての偶数を含む:
+\[X=\{2n : n \in \mathbb{Z}\}\]
+
+
+\begin{comment}
 \subsubsection{Logic}
+\end{comment}
+\subsubsection{論理演算}
 
 \index{logic}
 \index{negation}
@@ -899,7 +1313,14 @@ contains all even integers.
 \index{disjunction}
 \index{implication}
 \index{equivalence}
+\index{論理演算}
+\index{否定}
+\index{論理積}
+\index{論理和}
+\index{含意}
+\index{同値}
 
+\begin{comment}
 The value of a logical expression is either
 \key{true} (1) or \key{false} (0).
 The most important logical operators are
@@ -909,6 +1330,17 @@ $\lor$ (\key{disjunction}),
 $\Rightarrow$ (\key{implication}) and
 $\Leftrightarrow$ (\key{equivalence}).
 The following table shows the meanings of these operators:
+\end{comment}
+
+論理演算で取りうる値は
+真(\key{true},1) か 偽(\key{false}, 0)である。
+特に重要な演算子として、
+$\lnot$ (否定,\key{negation}),
+$\land$ (論理積,\key{conjunction}),
+$\lor$ (論理和,\key{disjunction}),
+$\Rightarrow$ (含意,\key{implication}),
+$\Leftrightarrow$ (同値\key{equivalence})がある。
+これらの演算の意味は下記の票のとおりである。
 
 \begin{center}
 \begin{tabular}{rr|rrrrrrr}
@@ -921,6 +1353,7 @@ $A$ & $B$ & $\lnot A$ & $\lnot B$ & $A \land B$ & $A \lor B$ & $A \Rightarrow B$
 \end{tabular}
 \end{center}
 
+\begin{comment}
 The expression $\lnot A$ has the opposite value of $A$.
 The expression $A \land B$ is true if both $A$ and $B$
 are true,
@@ -930,18 +1363,35 @@ The expression $A \Rightarrow B$ is true
 if whenever $A$ is true, also $B$ is true.
 The expression $A \Leftrightarrow B$ is true
 if $A$ and $B$ are both true or both false.
+\end{comment}
+
+式$\lnot A$が$A$と反対の値を返す。
+式$A \land B$は、$A$と$B$両方が真の場合のみ真である。
+式$A \lor B$ は、$A$と$B$いずれかもしくは両方が真の場合に真である。
+式$A \Rightarrow B$ は、$A$が真の場合に$B$も真であれば真である。
+式$A \Leftrightarrow B$は、$A$と$B$が両方とも真または両方とも偽のとき真である。
 
 \index{predicate}
+\index{述語}
 
+\begin{comment}
 A \key{predicate} is an expression that is true or false
 depending on its parameters.
 Predicates are usually denoted by capital letters.
 For example, we can define a predicate $P(x)$
 that is true exactly when $x$ is a prime number.
 Using this definition, $P(7)$ is true but $P(8)$ is false.
+\end{comment}
+
+述語（\key{predicate}）は引数に応じて真偽いずれかの値を返す式である。
+述語は通常大文字で表現される。
+例えば$P(x)$を$x$が素数であるときに真を返す述語とする。
+この定義に沿えば、$P(7)$は真で$P(8)$は偽である。
 
 \index{quantifier}
+\index{量化子}
 
+\begin{comment}
 A \key{quantifier} connects a logical expression
 to the elements of a set.
 The most important quantifiers are
@@ -953,7 +1403,17 @@ there is an element $y$ in the set
 such that $y$ is smaller than $x$.
 This is true in the set of integers,
 but false in the set of natural numbers.
+\end{comment}
 
+量化子（もしくは限量子、限定子、\key{quantifier}）とは、
+集合の要素と式を結びつける役割を持つ。
+最も重要な量化子は$\forall$ (全称量化子, \key{for all})と$\exists$ (限定量化子, \key{there is}).である。
+例えば式
+\[\forall x (\exists y (y < x))\]
+は、集合のあらゆる要素$x$に対して、$x$より小さな$y$となるような要素$y$が存在することを示す。
+これは整数集合に対しては真であるが、自然数集合に対しては偽である。
+
+\begin{comment}
 Using the notation described above,
 we can express many kinds of logical propositions.
 For example,
@@ -963,7 +1423,17 @@ and not a prime number,
 then there are numbers $a$ and $b$
 that are larger than $1$ and whose product is $x$.
 This proposition is true in the set of integers.
+\end{comment}
 
+ここまでに挙げた表記法により、さまざまな条件記述が可能となる。
+例えば
+\[\forall x ((x>1 \land \lnot P(x)) \Rightarrow (\exists a (\exists b (a > 1 \land b > 1 \land x = ab))))\]
+は$x$が1より大きい合成数であれば、1より大きな2つの数値$a$,$b$のうち
+積が$x$となるものが存在することを意味する。
+この条件は整数集合について真である。
+
+
+\begin{comment}
 \subsubsection{Functions}
 
 The function $\lfloor x \rfloor$ rounds the number $x$
@@ -978,12 +1448,33 @@ give the smallest and largest of values
 $x_1,x_2,\ldots,x_n$.
 For example,
 \[ \min(1,2,3)=1 \hspace{10pt} \textrm{and} \hspace{10pt} \max(1,2,3)=3.\]
+\end{comment}
+
+\subsubsection{関数}
+
+関数$\lfloor x \rfloor$は実数$x$からそれを超えない最大の整数に変換し、
+関数$\lceil x \rceil$は実数$x$からそれ以上の最小の整数に変換する。
+例えば下記の通り:
+\[ \lfloor 3/2 \rfloor = 1 \hspace{10pt} \textrm{and} \hspace{10pt} \lceil 3/2 \rceil = 2.\]
+
+関数$\min(x_1,x_2,\ldots,x_n)$や$\max(x_1,x_2,\ldots,x_n)$は
+値$x_1,x_2,\ldots,x_n$のうち最小もしくは最大値を取り出す。
+例えば下記の通り:
+\[ \min(1,2,3)=1 \hspace{10pt} \textrm{and} \hspace{10pt} \max(1,2,3)=3.\]
 
 \index{factorial}
+\index{階乗}
 
+\begin{comment}
 The \key{factorial} $n!$ can be defined
 \[\prod_{x=1}^n x = 1 \cdot 2 \cdot 3 \cdot \ldots \cdot n\]
 or recursively
+\end{comment}
+
+階乗(\key{factorial}) $n!$は下記の通り定義できる:
+\[\prod_{x=1}^n x = 1 \cdot 2 \cdot 3 \cdot \ldots \cdot n\]
+もしくは再帰的な定義もできる:
+
 \[
 \begin{array}{lcl}
 0! & = & 1 \\
@@ -992,7 +1483,9 @@ n! & = & n \cdot (n-1)! \\
 \]
 
 \index{Fibonacci number}
+\index{フィボナッチ数列}
 
+\begin{comment}
 The \key{Fibonacci numbers}
 %\footnote{Fibonacci (c. 1175--1250) was an Italian mathematician.}
 arise in many situations.
@@ -1010,11 +1503,31 @@ There is also a closed-form formula
 for calculating Fibonacci numbers, which is sometimes called
 \index{Binet's formula} \key{Binet's formula}:
 \[f(n)=\frac{(1 + \sqrt{5})^n - (1-\sqrt{5})^n}{2^n \sqrt{5}}.\]
+\end{comment}
 
+フィボナッチ数列（\key{Fibonacci numbers}）は多くの事例で登場する。
+この数列は下記の通り再帰的に定義される:
+\[
+\begin{array}{lcl}
+f(0) & = & 0 \\
+f(1) & = & 1 \\
+f(n) & = & f(n-1)+f(n-2) \\
+\end{array}
+\]
+フィボナッチ数列の先頭は以下のような数列である:
+\[0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, \ldots\]
+フィボナッチ数列を求める内包形式の公式もあり、\index{Binet's formula} \key{Binet's formula}と呼ばれる:
+\[f(n)=\frac{(1 + \sqrt{5})^n - (1-\sqrt{5})^n}{2^n \sqrt{5}}.\]
+
+\begin{comment}
 \subsubsection{Logarithms}
+\end{comment}
+\subsubsection{対数}
 
 \index{logarithm}
+\index{対数}
 
+\begin{comment}
 The \key{logarithm} of a number $x$
 is denoted $\log_k(x)$, where $k$ is the base
 of the logarithm.
@@ -1027,9 +1540,18 @@ we have to divide $x$ by $k$ before we reach
 the number 1.
 For example, $\log_2(32)=5$
 because 5 divisions by 2 are needed:
+\end{comment}
+
+数$x$の対数（\key{logarithm}）は式$\log_k(x)$で現れる。
+$k$は対数の底である。
+定義より、$\log_k(x)=a$となるのは$k^a=x$の場合である
+
+対数の重要な特徴として、$\log_k(x)$は$x$が1に到達するまで$k$で
+割っていったときの除算の回数に一致する点がある。
 
 \[32 \rightarrow 16 \rightarrow 8 \rightarrow 4 \rightarrow 2 \rightarrow 1 \]
 
+\begin{comment}
 Logarithms are often used in the analysis of
 algorithms, because many efficient algorithms
 halve something at each step.
@@ -1047,9 +1569,17 @@ Another useful formula is
 and using this, it is possible to calculate
 logarithms to any base if there is a way to
 calculate logarithms to some fixed base.
+\end{comment}
+
+対数はしばしばアルゴリズムの分析に使われる。
+それは、多くの効率的なアルゴリズムが処理対象を1ステップで
+半分にしていくものであるためである。
+そのため我々はアルゴリズムの効率を入力データの対数値から見積もることがある。
 
 \index{natural logarithm}
+\index{自然対数}
 
+\begin{comment}
 The \key{natural logarithm} $\ln(x)$ of a number $x$
 is a logarithm whose base is $e \approx 2.71828$.
 Another property of logarithms is that
@@ -1058,11 +1588,24 @@ $\lfloor \log_b(x)+1 \rfloor$.
 For example, the representation of
 $123$ in base $2$ is 1111011 and
 $\lfloor \log_2(123)+1 \rfloor = 7$.
+\end{comment}
 
+数$n$の自然対数(\key{natural logarithm}) $\ln(x)$とは、
+底に$e \approx 2.71828$を用いたときの対数値である。
+
+対数の別の用途としては、数$x$を$b$進数表記したときの
+桁数が$\lfloor \log_b(x)+1 \rfloor$となることである。
+例えば$123$の2進数表記は1111011であり、$\lfloor \log_2(123)+1 \rfloor = 7$である。
+
+\begin{comment}
 \section{Contests and resources}
+\end{comment}
+
+\section{コンテストと情報源}
 
 \subsubsection{IOI}
 
+\begin{comment}
 The International Olympiad in Informatics (IOI)
 is an annual programming contest for
 secondary school students.
@@ -1078,7 +1621,19 @@ The tasks are divided into subtasks,
 each of which has an assigned score.
 Even if the contestants are divided into teams,
 they compete as individuals.
+\end{comment}
 
+国際情報オリンピック(The International Olympiad in Informatics, IOI)は
+高校生を対象として毎回開催されるプログラミングコンテストである。
+各国4名からなるチームが参加する。
+例年80か国から計300名程度が参加する。
+
+IOIは5時間のコンテスト2回からなる。
+参加者はそれぞれで様々な難易度の3問のタスクに取り組む。
+各問題はサブタスクがあり、回答状況によって部分点が得られる。
+参加者は国ごとにチームを構成するものの、競技は個人で行う。
+
+\begin{comment}
 The IOI syllabus \cite{iois} regulates the topics
 that may appear in IOI tasks.
 Almost all the topics in the IOI syllabus
@@ -1097,9 +1652,27 @@ such as the Croatian Open Competition in Informatics \cite{coci}
 and the USA Computing Olympiad \cite{usaco}.
 In addition, a large collection of problems from Polish contests
 is available online \cite{main}.
+\end{comment}
+
+IOIシラバス\cite{iois}　はIOIのレギュレーションについて明記している。
+IOIシラバスのほとんどの内容はこの本で網羅されている。
+
+IOIの参加者は国内コンテストを通じ選抜される。
+IOIの前、各地の地域別コンテストが行われる。
+例えばthe Baltic Olympiad in Informatics (BOI),
+the Central European Olympiad in Informatics (CEOI),
+the Asia-Pacific Informatics Olympiad (APIO)がある。
+
+一部の国では将来のIOI選手に向け練習用のオンラインコンテストを
+実施している。
+例えばthe Croatian Open Competition in Informatics \cite{coci}や
+and the USA Computing Olympiad \cite{usaco}がある。
+加えて、大量の問題セットからなるポーランドのコンテストサイトも利用できる\cite{main}。
 
 \subsubsection{ICPC}
 
+
+\begin{comment}
 The International Collegiate Programming Contest (ICPC)
 is an annual programming contest for university students.
 Each team in the contest consists of three students,
@@ -1113,7 +1686,20 @@ in the contest, there are only a small number\footnote{The exact number of final
 slots varies from year to year; in 2017, there were 133 final slots.} of final slots available,
 so even advancing to the finals
 is a great achievement in some regions.
+\end{comment}
 
+国際大学対抗プログラミングコンテスト（The International Collegiate Programming Contest, ICPC)
+は大学生を対象として毎年開催されるコンテストである。
+各チームは3名の学生で構成される。
+IOIと異なり、こちらは3名で1台のコンピュータを用いて一緒に競技に参加する。
+
+ICPCは何段階かのステージを経て、最終的に成績の優秀なチームのみ
+決勝に招待される。
+全参加者は万単位であるが、決勝に残るのはわずかであり、
+\footnote{年によって変化はあるが、2017年は133チームである。}
+地域によっては決勝に残るだけでも偉大な成績であると言える。
+
+\begin{comment}
 In each ICPC contest, the teams have five hours of time to
 solve about ten algorithm problems.
 A solution to a problem is accepted only if it solves
@@ -1126,7 +1712,19 @@ The topics that may appear at the ICPC are not so well
 specified as those at the IOI.
 In any case, it is clear that more knowledge is needed
 at the ICPC, especially more mathematical skills.
+\end{comment}
 
+ICPCでは5時間で約10問の問題に取り組む。
+各問題への採点には部分点はなく、全テストケースで正答しなければ
+正解とみなされない。
+コンテスト中、参加者は他チームの状況を知ることができる。
+しかし最後の1時間はスコア表は凍結され、他の参加者には
+以後の状況が公開されなくなる。
+
+ICPCの出題範囲はIOIほど明確には規定されていない。
+ただし、IOIより多くの知識と数学のスキルを要することは確かである。
+
+\begin{comment}
 \subsubsection{Online contests}
 
 There are also many online contests that are open for everybody.
@@ -1141,11 +1739,33 @@ Examples of such contests are Facebook Hacker Cup,
 Google Code Jam and Yandex.Algorithm.
 Of course, companies also use those contests for recruiting:
 performing well in a contest is a good way to prove one's skills.
+\end{comment}
 
+\subsubsection{オンラインコンテスト}
+
+誰でも参加できるオンラインコンテストも多数ある。
+現在最も活発なのはCodeforcesで、毎週コンテストが開催されている。
+Codeforcesは参加者を2つのdivisionに分けており、
+初級者はDiv2、上級者はDiv1で競う。
+他のコンテストサイトには、AtCoder、CS Academy、HackerRank、Topcoderなどがある。
+
+一部企業はオンサイト決勝を含むオンラインコンテストを行っている。
+例として、Facebook Hacker Cup, Google Code Jam, Yandex.Algorithmが挙げられる。
+これら企業はコンテストを採用の一環として利用している。
+そのためコンテストでよい結果を示すことは、自身のスキルを証明するよい方法とも言える。
+
+
+\begin{comment}
 \subsubsection{Books}
 
 There are already some books (besides this book) that
 focus on competitive programming and algorithmic problem solving:
+\end{comment}
+
+\subsubsection{書籍}
+
+競技プログラミングやアルゴリズムを用いた問題解決について、
+（もちろん本書も含めて）すでにいくつかの本が存在する:
 
 \begin{itemize}
 \item S. S. Skiena and M. A. Revilla:
@@ -1156,12 +1776,10 @@ focus on competitive programming and algorithmic problem solving:
 the University of Warsaw Programming Competitions} \cite{dik12}
 \end{itemize}
 
-The first two books are intended for beginners,
-whereas the last book contains advanced material.
+上2つは初心者向けで、3つ目は上級者向けの内容を含む。
 
-Of course, general algorithm books are also suitable for
-competitive programmers.
-Some popular books are:
+もちろん一般的なアルゴリズムの解説書も有用である。
+著名な本は下記の通り:
 
 \begin{itemize}
 \item T. H. Cormen, C. E. Leiserson, R. L. Rivest and C. Stein:
