@@ -1,3 +1,4 @@
+\begin{comment}
 \chapter{Complete search}
 
 \key{Complete search}
@@ -15,7 +16,23 @@ and it always gives the correct answer.
 If complete search is too slow,
 other techniques, such as greedy algorithms or
 dynamic programming, may be needed.
+\end{comment}
 
+\chapter{全探索}
+
+全探索（\key{Complete search}）はほとんどのアルゴリズムの
+問題を解くことができる汎用の手段である。
+そのアイデアは、あり得る可能性を総当たりですべて列挙し、
+その中で問題に応じて最適値を求めたり組み合わせの総数を
+求める。
+
+全探索は一般的に実装が容易で正しい解にたどり着きやすいため、
+十分な時間があるならば良いテクニックである。
+全探索では遅すぎる場合は、別のテクニック、例えば
+貪欲法なり動的計画法なりが必要となる。
+
+
+\begin{comment}
 \section{Generating subsets}
 
 \index{subset}
@@ -28,7 +45,22 @@ $\{0,2\}$, $\{1,2\}$ and $\{0,1,2\}$.
 There are two common methods to generate subsets:
 we can either perform a recursive search
 or exploit the bit representation of integers.
+\end{comment}
 
+\section{部分集合の生成}
+
+\index{subset}
+\index{部分集合}
+
+まず$n$要素の集合から、あり得る全部分集合を列挙する問題を考えよう。
+例えば$\{0,1,2\}$の部分集合は
+$\emptyset$, $\{0\}$, $\{1\}$, $\{2\}$, $\{0,1\}$,
+$\{0,2\}$, $\{1,2\}$, $\{0,1,2\}$である。
+部分集合の生成には２つの定番手法として
+再帰的な探索と、ビット演算の活用がある。
+
+
+\begin{comment}
 \subsubsection{Method 1}
 
 An elegant way to go through all subsets
@@ -53,7 +85,33 @@ void search(int k) {
     }
 }
 \end{lstlisting}
+\end{comment}
 
+\subsubsection{方法 1}
+
+全部分集合を探索するエレガントな方法として
+再帰を用いる方法がある。
+以下の\texttt{search}関数は集合$\{0,1,\ldots,n-1\}$の
+部分集合を生成する。
+
+この.関数は、部分集合の要素を含む配列\texttt{subset}
+を管理していく。
+探索はこの関数を引数0で呼び出して始める:
+
+\begin{lstlisting}
+void search(int k) {
+    if (k == n) {
+        // 部分集合に関して処理を行う
+    } else {
+        search(k+1);
+        subset.push_back(k);
+        search(k+1);
+        subset.pop_back();
+    }
+}
+\end{lstlisting}
+
+\begin{comment}
 When the function \texttt{search}
 is called with parameter $k$,
 it decides whether to include the
@@ -68,6 +126,19 @@ The following tree illustrates the function calls when $n=3$.
 We can always choose either the left branch
 ($k$ is not included in the subset) or the right branch
 ($k$ is included in the subset).
+\end{comment}
+
+関数\texttt{search}が引数$k$で呼び出されると、
+その際に部分集合の要素として$k$を含む場合と
+含まない場合を考慮し、それぞれに対して
+引数を$k+1$として再帰的に処理を行う。
+$k=n$となると$n$未満の全要素について
+処理が終わったことがわかるので、その時点で
+部分集合が生成されたと判断できる。
+
+以下の樹形図は、$n=3$の場合の関数呼び出しを表したものである。
+この関数は常に左側の枝($k$が部分集合に含まれない)を探索したのち
+右側の枝（$k$が部分集合に含まれる)を探索する。
 
 \begin{center}
 \begin{tikzpicture}[scale=.45]
@@ -122,6 +193,7 @@ We can always choose either the left branch
 \end{tikzpicture}
 \end{center}
 
+\begin{comment}
 \subsubsection{Method 2}
 
 Another way to generate subsets is based on
@@ -138,7 +210,23 @@ the second last bit corresponds to element 1,
 and so on.
 For example, the bit representation of 25
 is 11001, which corresponds to the subset $\{0,3,4\}$.
+\end{comment}
 
+\subsubsection{方法 2}
+
+部分集合群を生成する別の方法は、整数におけるビット表現を
+活用することである。
+$n$要素の集合の部分集合を$n$ビットの並びとして表現する。
+すなわち$0 \ldots 2^n-1$の範囲の整数に対応付ける。
+ビット列中1がセットされた箇所は、対応する要素が部分集合中に
+含まれていることを意味する。
+
+良くある対応付けは、末尾のビットを要素0、末尾から2番目のビットを
+要素1、というように対応付けるものである。
+例えば整数値25のビット表現は11001となるが、
+これは部分集合$\{0,3,4\}$と対応付けられる。
+
+\begin{comment}
 The following code goes through the subsets
 of a set of $n$ elements
 
@@ -153,6 +241,19 @@ the elements of a subset that corresponds to a bit sequence.
 When processing each subset,
 the code builds a vector that contains the
 elements in the subset.
+\end{comment}
+
+$n$要素の部分集合群は、以下のコードで探索できる:
+
+\begin{lstlisting}
+for (int b = 0; b < (1<<n); b++) {
+    // 部分集合を処理する
+}
+\end{lstlisting}
+
+以下のコードは、ビット列に対応する部分集合の生成法を示している。
+各部分集合を示すビット列に対応して、実際の要素を
+含む配列を生成している。
 
 \begin{lstlisting}
 for (int b = 0; b < (1<<n); b++) {
@@ -163,6 +264,7 @@ for (int b = 0; b < (1<<n); b++) {
 }
 \end{lstlisting}
 
+\begin{comment}
 \section{Generating permutations}
 
 \index{permutation}
@@ -176,6 +278,20 @@ Again, there are two approaches:
 we can either use recursion or go through the
 permutations iteratively.
 
+\end{comment}
+
+\section{順列の生成}
+
+\index{permutation}
+\index{順列}
+
+続けて、$n$要素のすべての順列を生成する問題を考える。
+例えば、$\{0,1,2\}$の順列は$(0,1,2)$, $(0,2,1)$, $(1,0,2)$, $(1,2,0)$,
+$(2,0,1)$,$(2,1,0)$である。
+こちらも２つの定番アプローチとして、再帰を用いる方法と
+順次順列を生成していく方法がある。
+
+\begin{comment}
 \subsubsection{Method 1}
 
 Like subsets, permutations can be generated
@@ -203,14 +319,49 @@ void search() {
     }
 }
 \end{lstlisting}
+\end{comment}
 
+\subsubsection{方法 1}
+
+部分集合同様、順列も再帰を使って生成できる。
+以下の関数\texttt{search}は集合$\{0,1,\ldots,n-1\}$の順列を生成し、
+配列\texttt{permutation}に格納していく。
+この再帰関数は、配列が空の状態で始まる:
+
+\begin{lstlisting}
+void search() {
+    if (permutation.size() == n) {
+        // 順列に関し処理を行う
+    } else {
+        for (int i = 0; i < n; i++) {
+            if (chosen[i]) continue;
+            chosen[i] = true;
+            permutation.push_back(i);
+            search();
+            chosen[i] = false;
+            permutation.pop_back();
+        }
+    }
+}
+\end{lstlisting}
+
+\begin{comment}
 Each function call adds a new element to
 \texttt{permutation}.
 The array \texttt{chosen} indicates which
 elements are already included in the permutation.
 If the size of \texttt{permutation} equals the size of the set,
 a permutation has been generated.
+\end{comment}
 
+関数が呼び出されるたびに\texttt{permutation}に
+要素が追加されていく。
+配列\texttt{chosen}は、どの要素がすでに順列に
+含まれているかを示す。
+\texttt{permutation}の大きさが元の集合と一致すると
+処理は完了し、順列が生成された状態となる。
+
+\begin{comment}
 \subsubsection{Method 2}
 
 \index{next\_permutation@\texttt{next\_permutation}}
@@ -232,7 +383,28 @@ do {
     // process permutation
 } while (next_permutation(permutation.begin(),permutation.end()));
 \end{lstlisting}
+\end{comment}
 
+\subsubsection{方法 2}
+
+\index{next\_permutation@\texttt{next\_permutation}}
+
+順列を生成する別の方法は、まず$\{0,1,\ldots,n-1\}$から初めて、
+辞書順で次の順列を順次生成していく方法である。
+C++標準ライブラリにある\texttt{next\_permutation}関数が
+この手続きを提供している:
+
+\begin{lstlisting}
+vector<int> permutation;
+for (int i = 0; i < n; i++) {
+    permutation.push_back(i);
+}
+do {
+    // 処理を行う
+} while (next_permutation(permutation.begin(),permutation.end()));
+\end{lstlisting}
+
+\begin{comment}
 \section{Backtracking}
 
 \index{backtracking}
@@ -243,7 +415,18 @@ and extends the solution step by step.
 The search recursively
 goes through all different ways how
 a solution can be constructed.
+\end{comment}
 
+\section{バックトラック法}
+
+\index{backtracking}
+\index{バックトラック法}
+
+バックトラック法（\key{backtracking}）とは、
+初期状態から1手ずつ再帰的に先に進めていき、
+最終的に異なる状態をすべてたどる方法である。
+
+\begin{comment}
 \index{queen problem}
 
 As an example, consider the problem of
@@ -253,6 +436,15 @@ an $n \times n$ chessboard so that
 no two queens attack each other.
 For example, when $n=4$,
 there are two possible solutions:
+\end{comment}
+
+\index{queen problem}
+\index{Nクイーン問題}
+
+例として、$n \times n$の大きさのチェス盤に
+$n$個のクイーンの駒を互いに攻撃できない位置に
+置く置き方を数え上げる問題を考える。
+例えば$n=4$の場合次の2つの解がある:
 
 \begin{center}
 \begin{tikzpicture}[scale=.65]
@@ -273,6 +465,7 @@ there are two possible solutions:
 \end{tikzpicture}
 \end{center}
 
+\begin{comment}
 The problem can be solved using backtracking
 by placing queens to the board row by row.
 More precisely, exactly one queen will
@@ -284,7 +477,18 @@ $n$ queens have been placed on the board.
 For example, when $n=4$,
 some partial solutions generated by
 the backtracking algorithm are as follows:
+\end{comment}
 
+この問題は行ごとに駒を配置していくバックトラック法で
+解くことができる。
+より正確に書くと、各列にすでに置いた駒と互いに攻撃
+しあわないような位置に新たに1箇所駒を追加していく。
+$n$個の駒をすべて配置したらそれが解となる。
+
+例えば$n=4$の場合、バックトラック法で生成される
+解の一部は下記の通りとなる:
+
+\begin{comment}
 \begin{center}
 \begin{tikzpicture}[scale=.55]
   \begin{scope}
@@ -332,6 +536,70 @@ the backtracking algorithm are as follows:
   \end{scope}
 \end{tikzpicture}
 \end{center}
+\end{comment}
+
+\begin{center}
+\begin{tikzpicture}[scale=.55]
+  \begin{scope}
+    \draw (0, 0) grid (4, 4);
+
+    \draw (-9, -6) grid (-5, -2);
+    \draw (-3, -6) grid (1, -2);
+    \draw (3, -6) grid (7, -2);
+    \draw (9, -6) grid (13, -2);
+
+    \node at (-9+0.5,-3+0.5) {\symqueen};
+    \node at (-3+1+0.5,-3+0.5) {\symqueen};
+    \node at (3+2+0.5,-3+0.5) {\symqueen};
+    \node at (9+3+0.5,-3+0.5) {\symqueen};
+
+    \draw (2,0) -- (-7,-2);
+    \draw (2,0) -- (-1,-2);
+    \draw (2,0) -- (5,-2);
+    \draw (2,0) -- (11,-2);
+
+    \draw (-11, -12) grid (-7, -8);
+    \draw (-6, -12) grid (-2, -8);
+    \draw (-1, -12) grid (3, -8);
+    \draw (4, -12) grid (8, -8);
+    \draw[white] (11, -12) grid (15, -8);
+    \node at (-11+1+0.5,-9+0.5) {\symqueen};
+    \node at (-6+1+0.5,-9+0.5) {\symqueen};
+    \node at (-1+1+0.5,-9+0.5) {\symqueen};
+    \node at (4+1+0.5,-9+0.5) {\symqueen};
+    \node at (-11+0+0.5,-10+0.5) {\symqueen};
+    \node at (-6+1+0.5,-10+0.5) {\symqueen};
+    \node at (-1+2+0.5,-10+0.5) {\symqueen};
+    \node at (4+3+0.5,-10+0.5) {\symqueen};
+
+    \draw (-1,-6) -- (-9,-8);
+    \draw (-1,-6) -- (-4,-8);
+    \draw (-1,-6) -- (1,-8);
+    \draw (-1,-6) -- (6,-8);
+
+    \node at (-9,-13) {無効};
+    \node at (-4,-13) {無効};
+    \node at (1,-13) {無効};
+    \node at (6,-13) {有効};
+
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\begin{comment}
+At the bottom level, the three first configurations
+are illegal, because the queens attack each other.
+However, the fourth configuration is valid
+and it can be extended to a complete solution by
+placing two more queens to the board.
+There is only one way to place the two remaining queens.
+\end{comment}
+
+
+最下段において、先頭の３つの構成はクイーンが互いに互いを攻撃できるため無効である。
+しかし４つ目の構成は有効であり、残り２つのクイーンを置いていくと完全な解まで探索を
+拡張できる。
+残り２つのクイーンの置き方は一通りしかない。
 
 At the bottom level, the three first configurations
 are illegal, because the queens attack each other.
@@ -341,7 +609,12 @@ placing two more queens to the board.
 There is only one way to place the two remaining queens.
 
 \begin{samepage}
+
+\begin{comment}
 The algorithm can be implemented as follows:
+\end{comment}
+
+このアルゴリズムはこのように実装できる:
 \begin{lstlisting}
 void search(int y) {
     if (y == n) {
@@ -357,6 +630,8 @@ void search(int y) {
 }
 \end{lstlisting}
 \end{samepage}
+
+\begin{comment}
 The search begins by calling \texttt{search(0)}.
 The size of the board is $n \times n$,
 and the code calculates the number of solutions
@@ -380,6 +655,28 @@ column or diagonal that already contains a queen.
 For example, the columns and diagonals of
 the $4 \times 4$ board are numbered as follows:
 
+\end{comment}
+
+この探索は\texttt{search(0)}を呼ぶことで開始する。
+盤面の大きさを$n$とすると、このコードは求める解を計算し
+\texttt{count}に格納する。
+
+このコードでは、列および行が0から$n-1$まで番号が振られているものとして
+計算を行う。
+
+関数\texttt{search}が引数$y$を伴って呼び出されると、
+この関数は$y$行目にクイーンを1つ置き、
+自身の関数を引数$y+1$として再帰的に呼び出す。
+そのため、$y=n$に到達すると、解が1つ見つかったとみなすことができ、
+変数\texttt{count}がインクリメントされる。
+
+配列\texttt{column}はクイーンが配置された列の情報を
+保存するものであり、配列\texttt{diag1}と\texttt{diag2}は
+クイーンが配置された斜め方向の列の情報を保存するものである。
+すでにクイーンの配置された列や対角上にクイーンを追加することはできない。
+例えば、$4 \times 4$の盤面上を以下のように番号を割り当てる:
+
+\begin{comment}
 \begin{center}
 \begin{tikzpicture}[scale=.65]
   \begin{scope}
@@ -440,11 +737,74 @@ the $4 \times 4$ board are numbered as follows:
     \node at (-4,-1) {\texttt{column}};
     \node at (2,-1) {\texttt{diag1}};
     \node at (8,-1) {\texttt{diag2}};
+\end{comment}
+
+\begin{center}
+\begin{tikzpicture}[scale=.65]
+  \begin{scope}
+    \draw (0-6, 0) grid (4-6, 4);
+    \node at (-6+0.5,3.5) {$0$};
+    \node at (-6+1.5,3.5) {$1$};
+    \node at (-6+2.5,3.5) {$2$};
+    \node at (-6+3.5,3.5) {$3$};
+    \node at (-6+0.5,2.5) {$0$};
+    \node at (-6+1.5,2.5) {$1$};
+    \node at (-6+2.5,2.5) {$2$};
+    \node at (-6+3.5,2.5) {$3$};
+    \node at (-6+0.5,1.5) {$0$};
+    \node at (-6+1.5,1.5) {$1$};
+    \node at (-6+2.5,1.5) {$2$};
+    \node at (-6+3.5,1.5) {$3$};
+    \node at (-6+0.5,0.5) {$0$};
+    \node at (-6+1.5,0.5) {$1$};
+    \node at (-6+2.5,0.5) {$2$};
+    \node at (-6+3.5,0.5) {$3$};
+
+    \draw (0, 0) grid (4, 4);
+    \node at (0.5,3.5) {$0$};
+    \node at (1.5,3.5) {$1$};
+    \node at (2.5,3.5) {$2$};
+    \node at (3.5,3.5) {$3$};
+    \node at (0.5,2.5) {$1$};
+    \node at (1.5,2.5) {$2$};
+    \node at (2.5,2.5) {$3$};
+    \node at (3.5,2.5) {$4$};
+    \node at (0.5,1.5) {$2$};
+    \node at (1.5,1.5) {$3$};
+    \node at (2.5,1.5) {$4$};
+    \node at (3.5,1.5) {$5$};
+    \node at (0.5,0.5) {$3$};
+    \node at (1.5,0.5) {$4$};
+    \node at (2.5,0.5) {$5$};
+    \node at (3.5,0.5) {$6$};
+
+    \draw (6, 0) grid (10, 4);
+    \node at (6.5,3.5) {$3$};
+    \node at (7.5,3.5) {$4$};
+    \node at (8.5,3.5) {$5$};
+    \node at (9.5,3.5) {$6$};
+    \node at (6.5,2.5) {$2$};
+    \node at (7.5,2.5) {$3$};
+    \node at (8.5,2.5) {$4$};
+    \node at (9.5,2.5) {$5$};
+    \node at (6.5,1.5) {$1$};
+    \node at (7.5,1.5) {$2$};
+    \node at (8.5,1.5) {$3$};
+    \node at (9.5,1.5) {$4$};
+    \node at (6.5,0.5) {$0$};
+    \node at (7.5,0.5) {$1$};
+    \node at (8.5,0.5) {$2$};
+    \node at (9.5,0.5) {$3$};
+
+    \node at (-4,-1) {\texttt{列}};
+    \node at (2,-1) {\texttt{対角1}};
+    \node at (8,-1) {\texttt{対角2}};
 
   \end{scope}
 \end{tikzpicture}
 \end{center}
 
+\begin{comment}
 Let $q(n)$ denote the number of ways
 to place $n$ queens on an $n \times n$ chessboard.
 The above backtracking
@@ -457,7 +817,17 @@ using the above algorithm already takes about a minute
 on a modern computer\footnote{There is no known way to efficiently
 calculate larger values of $q(n)$. The current record is
 $q(27)=234907967154122528$, calculated in 2016 \cite{q27}.}.
+\end{comment}
 
+$q(n)$ を $n \times n$ の盤面に $n$ 個のクイーンを置く置き方の総数とする。
+先ほどのバックトラッキングにより、例えば $q(8)=92$　であることがわかる。
+$n$が増えると、探索は非常に遅くなる。
+というのも、総数が指数関数的に大きくなるためである。
+例えば、 $q(16)=14772512$　をこの方法で計算すると最近の計算機でも
+１分程度かかる。　\footnote{大きな$q(n)$を効率的に計算する手法は知られていない。
+現在の記録は、2016年に計算された $q(27)=234907967154122528$ である \cite{q27}。}
+
+\begin{comment}
 \section{Pruning the search}
 
 We can often optimize backtracking
@@ -477,6 +847,21 @@ path visits each square exactly once.
 For example, in a $7 \times 7$ grid,
 there are 111712 such paths.
 One of the paths is as follows:
+\end{comment}
+
+\section{探索の枝刈り}
+
+しばしば探索木を枝刈りすることで、バックトラッキングの最適化が可能である。
+そのアイデアは、アルゴリズムに知性を加え、今の探索を継続しても求める解に
+たどり着きそうにない場合、できるだけ早く気づけるようにすることである。
+このような最適化は探索の効率に著しく影響する場合がある。
+
+ここで、$n \times n$のグリッドにおいて、
+左上角のセルから右下角のセルに全セルを１回ずつ通って
+到達するパスの組み合わせを求める問題を考えてみよう。
+
+例えば、$7 \times 7$のグリッドにおいてそのようなパスは
+111712通りある。下記はその一例である:
 
 \begin{center}
 \begin{tikzpicture}[scale=.55]
@@ -494,6 +879,7 @@ One of the paths is as follows:
 \end{tikzpicture}
 \end{center}
 
+\begin{comment}
 We focus on the $7 \times 7$ case,
 because its level of difficulty is appropriate to our needs.
 We begin with a straightforward backtracking algorithm,
@@ -503,7 +889,16 @@ After each optimization, we measure the running time
 of the algorithm and the number of recursive calls,
 so that we clearly see the effect of each
 optimization on the efficiency of the search.
+\end{comment}
 
+以下アルゴリズムを考える上で適度な難易度なので、
+$7 \times 7$のケースに着目していく。
+まず単純なバックトラッキングアルゴリズムから始め、
+そこから探索を枝刈りできるか考察することで
+徐々に最適化していこう。
+
+
+\begin{comment}
 \subsubsection{Basic algorithm}
 
 The first version of the algorithm does not contain
@@ -517,7 +912,21 @@ running time: 483 seconds
 \item
 number of recursive calls: 76 billion
 \end{itemize}
+\end{comment}
 
+\subsubsection{基本的なアルゴリズム}
+
+最初のバージョンは、何も最適化せず、単純に可能なパスを全列挙して
+その数を数えるものとした。
+
+\begin{itemize}
+\item
+実行時間: 483秒
+\item
+再帰呼び出しの回数: 760億回
+\end{itemize}
+
+\begin{comment}
 \subsubsection{Optimization 1}
 
 In any solution, we first move one step
@@ -527,6 +936,13 @@ are symmetric
 about the diagonal of the grid
 after the first step.
 For example, the following paths are symmetric:
+\end{comment}
+
+\subsubsection{最適化1}
+
+どんな解も、最初のステップは下か右である。
+ある解に対して、対角に対して線対称な２つのパスが存在する。
+例えば、以下の２つのパスは対称である。
 
 \begin{center}
 \begin{tabular}{ccc}
@@ -561,6 +977,7 @@ For example, the following paths are symmetric:
 \end{tabular}
 \end{center}
 
+\begin{comment}
 Hence, we can decide that we always first
 move one step down (or right),
 and finally multiply the number of solutions by two.
@@ -571,7 +988,19 @@ running time: 244 seconds
 \item
 number of recursive calls: 38 billion
 \end{itemize}
+\end{comment}
 
+そのため、最初の移動は下（または右）と決め打ちし、
+最後に得られた値を倍にしよう
+
+\begin{itemize}
+\item
+実行時間: 244 秒
+\item
+再帰呼び出しの回数: 380億回
+\end{itemize}
+
+\begin{comment}
 \subsubsection{Optimization 2}
 
 If the path reaches the lower-right square
@@ -579,6 +1008,13 @@ before it has visited all other squares of the grid,
 it is clear that
 it will not be possible to complete the solution.
 An example of this is the following path:
+\end{comment}
+
+\subsubsection{最適化2}
+
+もしパスが全セルを辿る前に右下角に到達してしまった場合、
+以後の処理を続けても求めるパスにならないことは明らかである。
+以下のパスはその例である:
 
 \begin{center}
 \begin{tikzpicture}[scale=.55]
@@ -592,6 +1028,8 @@ An example of this is the following path:
   \end{scope}
 \end{tikzpicture}
 \end{center}
+
+\begin{comment}
 Using this observation, we can terminate the search
 immediately if we reach the lower-right square too early.
 \begin{itemize}
@@ -600,7 +1038,18 @@ running time: 119 seconds
 \item
 number of recursive calls: 20 billion
 \end{itemize}
+\end{comment}
 
+この考察より、右下角に早く到達した場合、
+探索を打ち切ることができる。
+\begin{itemize}
+\item
+実行時間: 119 秒
+\item
+再帰呼び出しの回数: 200億回
+\end{itemize}
+
+\begin{comment}
 \subsubsection{Optimization 3}
 
 If the path touches a wall
@@ -609,6 +1058,13 @@ the grid splits into two parts
 that contain unvisited squares.
 For example, in the following situation,
 the path can turn either left or right:
+\end{comment}
+
+\subsubsection{最適化3}
+
+パスが途中で周辺部に到達して、次に左か右に曲がるとき、
+グリッドは未到達セルを含む２つのパートに分割される。
+例えば、以下の状況では、パスは左か右に曲がることができる。
 
 \begin{center}
 \begin{tikzpicture}[scale=.55]
@@ -622,6 +1078,8 @@ the path can turn either left or right:
   \end{scope}
 \end{tikzpicture}
 \end{center}
+
+\begin{comment}
 In this case, we cannot visit all squares anymore,
 so we can terminate the search.
 This optimization is very useful:
@@ -632,7 +1090,20 @@ running time: 1.8 seconds
 \item
 number of recursive calls: 221 million
 \end{itemize}
+\end{comment}
 
+この例では、もはや全セルを辿ることはできないため、
+探索を打ち切ることができる。
+この最適化は非常に効果的である:
+
+\begin{itemize}
+\item
+実行時間: 1.8 秒
+\item
+再帰呼び出しの回数: 2.21億回
+\end{itemize}
+
+\begin{comment}
 \subsubsection{Optimization 4}
 
 The idea of Optimization 3
@@ -642,6 +1113,14 @@ but can turn either left or right,
 the grid splits into two parts
 that both contain unvisited squares.
 For example, consider the following path:
+\end{comment}
+
+\subsubsection{最適化4}
+
+最適化3のアイデアをさらに一般化する。
+パスが前に伸ばすことができず、左右どちらかに曲げることが可能な場合、
+グリッドは２つの未到達パートに分割される。
+例えば以下のようなパスを考える:
 
 \begin{center}
 \begin{tikzpicture}[scale=.55]
@@ -655,6 +1134,8 @@ For example, consider the following path:
   \end{scope}
 \end{tikzpicture}
 \end{center}
+
+\begin{comment}
 It is clear that we cannot visit all squares anymore,
 so we can terminate the search.
 After this optimization, the search is
@@ -666,7 +1147,21 @@ running time: 0.6 seconds
 \item
 number of recursive calls: 69 million
 \end{itemize}
+\end{comment}
 
+この例でも、全セルを辿ることができないことは明らかなので、
+探索を打ち切ることができる。
+この最適化により、探索は非常に効率的になった:
+
+\begin{itemize}
+\item
+実行時間: 0.6 秒
+\item
+再帰呼び出しの回数: 6900万回
+\end{itemize}
+
+
+\begin{comment}
 ~\\
 Now is a good moment to stop optimizing
 the algorithm and see what we have achieved.
@@ -684,7 +1179,23 @@ prune the search.
 Especially useful are optimizations that
 occur during the first steps of the algorithm,
 i.e., at the top of the search tree.
+\end{comment}
 
+~\\
+この辺で最適化を止め、効果を振り返ってみよう。
+元のアルゴリズムの実行時間は483秒だが、
+度重なる最適化により、たった0.6秒まで短縮した。
+すなわち1000倍近く高速化したことになる。
+
+このようなことはバックトラッキングではよくあることである。
+というのも探索木は通常非常に大きなものであり、
+ちょっとした考察でも効率的に枝刈りできることが
+あるためである。
+特にアルゴリズムの最初のステップにおける最適化は
+非常に効率的である。
+例えば探索木のトップにおける最適化が相当する。
+
+\begin{comment}
 \section{Meet in the middle}
 
 \index{meet in the middle}
@@ -704,7 +1215,24 @@ time than one large search.
 Typically, we can turn a factor of $2^n$
 into a factor of $2^{n/2}$ using the meet in the
 middle technique.
+\end{comment}
 
+\section{半分全列挙}
+
+\index{半分全列挙}
+
+\key{半分全列挙} \footnote{訳注: Meet in the middleはセキュリティ分野では中間一致攻撃と
+訳されることがあるが、ここでは競技プログラミングで使われる単語としてあえてこちらを用いた}
+は探索空間を同サイズの２つの空間に区切るテクニックである。
+分けた個々の空間に対して探索を行い、最後の両者の結果を組み合わせる。
+
+このテクニックが有効なのは、探索結果を組み合わせることが効率的に
+できる手段がある場合である。
+そのような場合、小さな２つの空間の探索を大きな１つの空間の
+探索より短い時間で実行できる。
+特に、$2^n$個の要素を半分全列挙により$2^{n/2}$個に分けることができる。
+
+\begin{comment}
 As an example, consider a problem where
 we are given a list of $n$ numbers and
 a number $x$,
@@ -726,7 +1254,25 @@ we can achieve a more efficient $O(2^{n/2})$ time algorithm\footnote{This
 idea was introduced in 1974 by E. Horowitz and S. Sahni \cite{hor74}.}.
 Note that $O(2^n)$ and $O(2^{n/2})$ are different
 complexities because $2^{n/2}$ equals $\sqrt{2^n}$.
+\end{comment}
 
+例として、$n$個の数値からなるリストと数値$x$が与えられたとき、
+和が$x$となる部分集合の存在を判定する問題を考える。
+例えば、リストが $[2,4,5,9]$ で $x=15$ の場合、
+$2+4+9=15$ より解として $[2,4,9]$ を選ぶことができる。
+しかし、同じリストに対して $x=10$ となる和を構成することはできない。
+
+単純なアルゴリズムは、リストの要素の全部分集合を探索し、
+各部分集合の和が$x$になるか判定することである。
+このアルゴリズムの実行時間は、部分集合が$2^n$通りあることから
+$O(2^n)$となる。
+しかしながら、半分全列挙を用いると、より効率的に
+$O(2^{n/2})$　時間のアルゴリズムを構成できる
+\footnote{このアイデアは1974年にE. HorowitzとS. Sahniによって紹介された\cite{hor74}。}。
+なお、$O(2^n)$と$O(2^{n/2})$は異なる計算量であることに注意すること。
+なぜなら $2^{n/2}$ は $\sqrt{2^n}$ と等しいからである。
+
+\begin{comment}
 The idea is to divide the list into
 two lists $A$ and $B$ such that both
 lists contain about half of the numbers.
@@ -756,3 +1302,30 @@ which can be done in $O(2^{n/2})$ time using a merge-like technique.
 After this, since the lists are sorted,
 we can check in $O(2^{n/2})$ time if
 the sum $x$ can be created from $S_A$ and $S_B$.
+\end{comment}
+
+このアルゴリズムのアイデアは、元のリストを半分の要素数を持つ
+２つのリスト$A$と$B$に分けることである。
+まず最初の探索では、$A$の全部分集合を列挙し、
+その和をリスト$S_A$に格納する。
+同様に、２回目の探索ではリスト$B$から部分集合の
+和のリスト$S_B$を構成する。
+その後、$S_A$の要素と$S_B$の要素を選び、
+その和が $x$となる場合があるかどうか判定する。
+そのような要素があるということは、元のリストにおいても
+和が$x$となる要素の選び方が可能であると言える。
+
+例えば、リストを $[2,4,5,9]$ 、$x=15$とする。
+まずリストを $A=[2,4]$ と $B=[5,9]$ の２つに分割する。
+その後、それぞれに対応して和のリスト$S_A=[0,2,4,6]$ と $S_B=[0,5,9,14]$ を作る。
+このケースでは、和が $x=15$ となるものは構成可能である。
+というのも、 $S_A$は和 $6$を含み、$S_B$は和$9$を含むため、
+$6+9=15$を構成できるためである。
+対応するリストの要素は $[2,4,9]$ である。
+
+このアルゴリズムの時間計算量は $O(2^{n/2})$ である。
+というのも、両リスト $A$ と $B$ は約 $n/2$ 要素を持っており、
+その部分集合の総和を求めてリスト$S_A$ と $S_B$を構成するのに
+それぞれ $O(2^{n/2})$ かかるためである。
+その後、$S_A$ と $S_B$から和が$x$となるものを構成できるか
+判定するのは $O(2^{n/2})$ でできる。
