@@ -1,3 +1,4 @@
+\begin{comment}
 \chapter{Greedy algorithms}
 
 \index{greedy algorithm}
@@ -20,12 +21,33 @@ The locally optimal choices in a greedy
 algorithm should also be globally optimal.
 It is often difficult to argue that
 a greedy algorithm works.
+\end{comment}
 
+
+\chapter{貪欲アルゴリズム}
+
+\index{greedy algorithm}
+\index{貪欲アルゴリズム}
+
+\key{貪欲アルゴリズム}は、そのつど最良に見える手を選択していく
+形で解法を構成する手法である。
+
+貪欲アルゴリズムは選択結果を巻き戻すことはせず、
+直接最終的な解を構成する。
+そのため、貪欲アルゴリズムは通常非常に効率的である。
+
+貪欲アルゴリズムの設計の難しさは、問題に対し必ず最適化を
+生成できるような貪欲な戦略を探すところにある。
+局所的に最適な選択が、全体でも最適でなければならない。
+そのため、貪欲解法で正答できると判断するのはしばしば
+難しい場合がある。
+
+\begin{comment}
 \section{Coin problem}
 
 As a first example, we consider a problem
 where we are given a set of coins
-and our task is to form a sum of money $n$
+and our task is to form a sum of money $x$
 using the coins.
 The values of the coins are
 $\texttt{coins}=\{c_1,c_2,\ldots,c_k\}$,
@@ -38,7 +60,21 @@ and $x=520$,
 we need at least four coins.
 The optimal solution is to select coins
 $200+200+100+20$ whose sum is 520.
+\end{comment}
 
+\section{コインの問題}
+
+最初の例として、コインの集合が与えられたとき、
+和が$n$となるようなコインの部分集合を求める問題を考えよう。
+それぞれのコインの価値は$\texttt{coins}=\{c_1,c_2,\ldots,c_k\}$であるとし、
+それぞれのコインは好きなだけ利用できるとする。
+部分集合を構成する際最小の枚数はいくつになるだろうか？
+
+例えば、ユーロにおけるコインの金額の種類は\[\{1,2,5,10,20,50,100,200\}\]であり、
+和$x$が$520$となるケースでは、コインは最小４枚必要である。
+最適な解はコインを$200+200+100+20 = 520$となるように選択することである。
+
+\begin{comment}
 \subsubsection{Greedy algorithm}
 
 A simple greedy algorithm to the problem
@@ -55,7 +91,23 @@ it always produces a solution with the fewest
 possible number of coins.
 The correctness of the algorithm can be
 shown as follows:
+\end{comment}
 
+\subsubsection{貪欲アルゴリズム}
+
+この問題に対するシンプルな貪欲アルゴリズムは、
+和が$x$に達するまで、できるだけ大きな金額のコインを使っていくことである。
+このアルゴリズムは上記の例ではうまく動作する。
+まず200セントのコインを２枚選択し、100セントのコインを1枚選択して
+最後に20セントのコインを選択すればよい。
+しかしこのアルゴリズムは常に有効なのだろうか？
+
+コインの種類がユーロと同じであれば、この貪欲アルゴリズムは
+\emph{常に}正解を返す。
+つまり最小のコイン枚数の解を得ることができる。
+このアルゴリズムの正しさは下記の通り示すことができる:
+
+\begin{comment}
 First, each coin 1, 5, 10, 50 and 100 appears
 at most once in an optimal solution,
 because if the
@@ -73,7 +125,20 @@ coins $20+20+20$ by coins $50+10$.
 Moreover, an optimal solution cannot contain
 coins $2+2+1$ or $20+20+10$,
 because we could replace them by coins $5$ and $50$.
+\end{comment}
 
+まず、1,5,10,50,100のコインは最適解において高々1枚しか
+選択しえない。というのも、これらのコインが２枚あるのであれば、
+より金額の高い１枚と置き換えることでより良い解を得られるからである。
+例えば、もし解が$5+5$を含むのであれば、$10$のコインに置き換えることができる。
+
+同様に、2,20のコインも最適解では高々２枚までしか含まれない。
+というのも、$2+2+2$の構成は$5+1$に、$20+20+20$の構成は
+$50+10$に置き換えられるからである。
+さらに、最適解は$2+2+1$や$20+20+10$という構成も持ちえない。
+これらは$5$や$50$のコイン１枚に置き換えられるためである。
+
+\begin{comment}
 Using these observations,
 we can show for each coin $x$ that
 it is not possible to optimally construct
@@ -87,7 +152,20 @@ the largest coin produces the optimal solution.
 This example shows that it can be difficult
 to argue that a greedy algorithm works,
 even if the algorithm itself is simple.
+\end{comment}
 
+これらの考察より、
+各コイン$x$に対して、$x$を用いずに和が$x$以上となる
+組み合わせの最適化を構成できないことがわかる。
+例えば、$x=100$を例にすると、これより小さい価値のコインで
+表せる最適解が最大枚数となるケースは$50+20+20+5+2+2=99$となる。
+そのため、常に最大価値のコインを選択する貪欲アルゴリズムは
+最適解を生成できる。
+
+この例は、アルゴリズム自体は単純でもそれが最適であることを
+示すのが比較的難しいことを示す好例である。
+
+\begin{comment}
 \subsubsection{General case}
 
 In the general case, the coin set can contain any coins
@@ -113,7 +191,24 @@ the general problem can be efficiently
 solved using a dynamic
 programming algorithm that always gives the
 correct answer.
+\end{comment}
 
+\subsubsection{一般的な例}
+
+コインンの組み合わせを任意に設定できる場合において、
+この貪欲アルゴリズムは最適解を生成できるとは\emph{限らない}。
+
+これは前述の貪欲アルゴリズムが非最適解を返す反例を持って
+示すことができる。
+コインの種類が$\{1,3,4\}$で和を6としたい場合、
+最適解は$3+3$だが、貪欲アルゴリズムでは$4+1+1$となってしまう。
+
+この一般的な例が貪欲解法で解けるかどうかは分かっていない
+\footnote{しかし、前述の貪欲解法で解けるコイン種別かどうかを多項式時間で
+判定することはできる\cite{pea05}。}。
+しかし、7章で例を示す通り、動的計画法でこの問題は効率よく解くことができる。
+
+\begin{comment}
 \section{Scheduling}
 
 Many scheduling problems can be solved
@@ -134,9 +229,37 @@ $C$ & 3 & 9 \\
 $D$ & 6 & 8 \\
 \end{tabular}
 \end{center}
+\end{comment}
+
+\section{スケジューリング}
+
+多くのスケジューリング問題は貪欲アルゴリズムで解くことができる。
+ここで古典的問題を考えよう。
+$n$個のイベントがあり、開始時間と終了時間が与えられる。
+最適にイベントをスケジューリングしたとき、最大でいくつのイベントを
+含むことができるか。
+ただしイベントの開催時間の一部だけ参加するということはできない。
+
+例えば以下のイベント例を考える:
+\begin{center}
+\begin{tabular}{lll}
+イベント & 開始時間 & 終了時間 \\
+\hline
+$A$ & 1 & 3 \\
+$B$ & 2 & 5 \\
+$C$ & 3 & 9 \\
+$D$ & 6 & 8 \\
+\end{tabular}
+\end{center}
+
+\begin{comment}
 In this case the maximum number of events is two.
 For example, we can select events $B$ and $D$
 as follows:
+\end{comment}
+
+この例ではイベントの最大数は2である。
+例えば下記のようにイベント$B$と$D$を選ぶことができる:
 \begin{center}
 \begin{tikzpicture}[scale=.4]
   \begin{scope}
@@ -152,15 +275,25 @@ as follows:
 \end{tikzpicture}
 \end{center}
 
-It is possible to invent several greedy algorithms
-for the problem, but which of them works in every case?
+\begin{comment}
+この問題について、色々貪欲アルゴリズムを考えることはできるだろうが、
+どんなケースにもうまく解答できるのはどんなアルゴリズムだろうか？
+\end{comment}
 
+\begin{comment}
 \subsubsection*{Algorithm 1}
 
 The first idea is to select as \emph{short}
 events as possible.
 In the example case this algorithm
 selects the following events:
+\end{comment}
+
+\subsubsection*{アルゴリズム 1}
+
+最初のアイデアは、\emph{短い}イベントをできるだけ選んでいく方法である。
+サンプルケースでは、このアルゴリズムは以下のようにイベントを選ぶ:
+
 \begin{center}
 \begin{tikzpicture}[scale=.4]
   \begin{scope}
@@ -176,9 +309,14 @@ selects the following events:
 \end{tikzpicture}
 \end{center}
 
+\begin{comment}
 However, selecting short events is not always
 a correct strategy. For example, the algorithm fails
 in the following case:
+\end{comment}
+
+しかし、短いイベントを選ぶ方法は常に正解とは限らない。
+例えば次の例では正解を得られない:
 \begin{center}
 \begin{tikzpicture}[scale=.4]
   \begin{scope}
@@ -188,14 +326,29 @@ in the following case:
   \end{scope}
 \end{tikzpicture}
 \end{center}
+
+\begin{comment}
 If we select the short event, we can only select one event.
 However, it would be possible to select both long events.
+\end{comment}
 
+この例では、短いイベントを選ぶと１つしかイベントを選択できない。
+しかし明らかに長いイベントを２つ選ぶ方が正解である。
+
+\begin{comment}
 \subsubsection*{Algorithm 2}
 
 Another idea is to always select the next possible
 event that \emph{begins} as \emph{early} as possible.
 This algorithm selects the following events:
+\end{comment}
+
+\subsubsection*{アルゴリズム 2}
+
+次のアイデアは、\emph{開始時間}ができるだけ\emph{早いもの}を
+できる限り選んでいく方法である。
+このアルゴリズムでは以下のようにイベントが選択される:
+
 \begin{center}
 \begin{tikzpicture}[scale=.4]
   \begin{scope}
@@ -211,10 +364,16 @@ This algorithm selects the following events:
 \end{tikzpicture}
 \end{center}
 
+\begin{comment}
 However, we can find a counterexample
 also for this algorithm.
 For example, in the following case,
 the algorithm only selects one event:
+\end{comment}
+
+しかし、このアルゴリズムに対しても反例が存在する。
+以下の例では、このアルゴリズムでは１つしかイベントを選択できない:
+
 \begin{center}
 \begin{tikzpicture}[scale=.4]
   \begin{scope}
@@ -224,16 +383,24 @@ the algorithm only selects one event:
   \end{scope}
 \end{tikzpicture}
 \end{center}
-If we select the first event, it is not possible
-to select any other events.
-However, it would be possible to select the
-other two events.
 
+もし最初のイベントを選ぶと、それ以上他のイベントを選べない。
+しかし、最初のイベントの選択をあきらめれば、残り２つの
+イベントを選ぶことができる。
+
+\begin{comment}
 \subsubsection*{Algorithm 3}
 
 The third idea is to always select the next
 possible event that \emph{ends} as \emph{early} as possible.
 This algorithm selects the following events: 
+\end{comment}
+
+\subsubsection*{アルゴリズム 3}
+
+３つ目のアルゴリズムは、\emph{終了時間}ができるだけ\emph{早いもの}を
+できる限り選んでいく方法である。
+このアルゴリズムでは以下のようにイベントを選択する:
 \begin{center}
 \begin{tikzpicture}[scale=.4]
   \begin{scope}
@@ -249,6 +416,7 @@ This algorithm selects the following events:
 \end{tikzpicture}
 \end{center}
 
+\begin{comment}
 It turns out that this algorithm
 \emph{always} produces an optimal solution.
 The reason for this is that it is always an optimal choice
@@ -269,7 +437,25 @@ choices how we can select the next event.
 Hence, selecting an event that ends later
 can never yield a better solution,
 and the greedy algorithm is correct.
+\end{comment}
 
+このアルゴリズムは\emph{常に}最適解を返すことがわかる。
+その理由は、終了時間の早いイベントを最初に選ぶことが
+常に最適な選択であるからである。
+そのイベントの後は、同様の手順で次のイベントを最適に
+選択していくことを、それ以上イベントが選べなくなるまで繰り返す。
+
+このアルゴリズムがうまく動くことを示す１つの方法は、
+終了時間が早くないイベントを選んだ時何が起きるかを
+考えることである。
+その場合、以後どれだけ最適な選び方をしても、
+最初のイベントで終了時間が早いものを選んだ場合と
+せいぜい同数にしかならない。
+よって、終了時間の遅いものを選ぶことがより良い解と
+なることはなく、この貪欲アルゴリズムは正しい。
+
+
+\begin{comment}
 \section{Tasks and deadlines}
 
 Let us now consider a problem where
@@ -294,6 +480,31 @@ $D$ & 4 & 5 \\
 \end{center}
 In this case, an optimal schedule for the tasks
 is as follows:
+\end{comment}
+
+\section{タスクと締切}
+
+次に、別の問題を考えよう。
+$n$個のタスクについて、実行時間と締切時刻が与えられる。
+これらのタスクを処理する順番を考えよう。
+各タスクについて、締切時刻を$d$、タスクを終了した時刻を$x$とすると、
+$d-x$ポイントの点を得られるものとする。
+総得点の最大値はどうなるだろうか？
+
+例えば、タスクが以下の通りだとする:
+\begin{center}
+\begin{tabular}{lll}
+タスク名 & 実行時間 & 締切時刻 \\
+\hline
+$A$ & 4 & 2 \\
+$B$ & 3 & 5 \\
+$C$ & 2 & 7 \\
+$D$ & 4 & 5 \\
+\end{tabular}
+\end{center}
+
+この例では、最適なスケジュールは以下のようになる:
+
 \begin{center}
 \begin{tikzpicture}[scale=.4]
   \begin{scope}
@@ -319,6 +530,8 @@ is as follows:
   \end{scope}
 \end{tikzpicture}
 \end{center}
+
+\begin{comment}
 In this solution, $C$ yields 5 points,
 $B$ yields 0 points, $A$ yields $-7$ points
 and $D$ yields $-8$ points,
@@ -334,6 +547,19 @@ two tasks one after another such that the first task
 takes longer than the second task,
 we can obtain a better solution if we swap the tasks.
 For example, consider the following schedule:
+\end{comment}
+
+この回答では、$C$で５ポイント、$B$で0ポイント、
+$A$で$-7$ポイント、$D$で$-10$ポイント得ることができ、
+総得点は$-10$ポイントとなる。
+
+驚くことに、この問題の最適解は締切時刻には全く関係ない。
+正しく動作する貪欲な戦略は、単にタスクを\emph{実行時間で昇順に
+ソートする}ことである。
+その理由は、２つの連続するタスクにおいて前者が後者より
+実行時間が長い場合、それらを交換することでより良い解を
+得られるためである。
+例えば、以下のスケジュールを考えよう:
 \begin{center}
 \begin{tikzpicture}[scale=.4]
   \begin{scope}
@@ -352,7 +578,12 @@ For example, consider the following schedule:
   \end{scope}
 \end{tikzpicture}
 \end{center}
+
+\begin{comment}
 Here $a>b$, so we should swap the tasks:
+\end{comment}
+
+ここで$a>b$なので、両者は交換するべきである:
 \begin{center}
 \begin{tikzpicture}[scale=.4]
   \begin{scope}
@@ -371,6 +602,8 @@ Here $a>b$, so we should swap the tasks:
   \end{scope}
 \end{tikzpicture}
 \end{center}
+
+\begin{comment}
 Now $X$ gives $b$ points less and $Y$ gives $a$ points more,
 so the total score increases by $a-b > 0$.
 In an optimal solution,
@@ -379,7 +612,16 @@ it must hold that the shorter task comes
 before the longer task.
 Thus, the tasks must be performed
 sorted by their durations.
+\end{comment}
 
+ここでタスク$X$により得られるポイントは$b$減少し、
+タスク$Y$により得られるポイントは$a$増加する。
+よって総得点は$a-b > 0$だけ増加する。
+最適解では、２つの連続するタスクでは常に先行するタスクには
+実行時間が短いほうが割り当てられる。
+よって、タスクは実行時間で昇順ソートした順で処理されなければならない。
+
+\begin{comment}
 \section{Minimizing sums}
 
 We next consider a problem where
@@ -388,7 +630,16 @@ and our task is to find a value $x$
 that minimizes the sum
 \[|a_1-x|^c+|a_2-x|^c+\cdots+|a_n-x|^c.\]
 We focus on the cases $c=1$ and $c=2$.
+\end{comment}
 
+\section{和の最小化}
+
+次の問題として、$n$個の数値$a_1,a_2,\ldots,a_n$が与えられたとき、
+和\[|a_1-x|^c+|a_2-x|^c+\cdots+|a_n-x|^c.\]
+を最小化するような数$x$を求める問題を考えてみよう。
+ここでは$c=1$と$c=2$の場合のみ考える。
+
+\begin{comment}
 \subsubsection{Case $c=1$}
 
 In this case, we should minimize the sum
@@ -405,7 +656,23 @@ i.e., the middle number after sorting.
 For example, the list $[1,2,9,2,6]$
 becomes $[1,2,2,6,9]$ after sorting,
 so the median is 2.
+\end{comment}
 
+\subsubsection{$c=1$の場合}
+
+この場合、以下の和を最小化する問題となる。
+\[|a_1-x|+|a_2-x|+\cdots+|a_n-x|.\]
+例えば、入力の数が$[1,2,9,2,6]$であれば、
+最適解は$x=2$であり、その時の和は下記のとおりとなる。
+\[
+|1-2|+|2-2|+|9-2|+|2-2|+|6-2|=12.
+\]
+一般に、$x$の最適値は数値群の\textit{中央値}
+（注：要素をソートした後の中央の値）となる。
+例えば、入力の数値群$[1,2,9,2,6]$はソート後
+$[1,2,2,6,9]$となるので、中央値は2である。
+
+\begin{comment}
 The median is an optimal choice,
 because if $x$ is smaller than the median,
 the sum becomes smaller by increasing $x$,
@@ -416,7 +683,18 @@ is the median.
 If $n$ is even and there are two medians,
 both medians and all values between them
 are optimal choices.
+\end{comment}
 
+中央値が最適値となるのは、
+もし$x$が中央値より小さい場合、和は$x$を
+大きくする毎に小さくなり、逆に$x$が中央値より大きいならば、
+和は$x$をへらほど小さくなる。
+よって最適解は$x$を中央値とすることである。
+$n$が偶数の場合中央値は２つあるが、
+その場合両方の値、および両者の間にあるあらゆる数が
+最適解となる。
+
+\begin{comment}
 \subsubsection{Case $c=2$}
 
 In this case, we should minimize the sum
@@ -444,7 +722,31 @@ with roots $x=0$ and $x=2s/n$,
 and the minimum value is the average
 of the roots $x=s/n$, i.e.,
 the average of the numbers $a_1,a_2,\ldots,a_n$.
+\end{comment}
 
+\subsubsection{$c=2$の場合}
+
+この場合、以下の和を最小化する問題となる。
+\[(a_1-x)^2+(a_2-x)^2+\cdots+(a_n-x)^2.\]
+例えば、入力値が$[1,2,9,2,6]$の場合、
+$x=4$が最適解であり、その時の和は下記のようになる。
+\[
+(1-4)^2+(2-4)^2+(9-4)^2+(2-4)^2+(6-4)^2=46.
+\]
+一般に、$x$の最適解は入力値の\emph{平均値}となる。
+この例では平均値は$(1+2+9+2+6)/5=4$である。
+この結果は、和を以下のように表現するとわかる:
+\[
+nx^2 - 2x(a_1+a_2+\cdots+a_n) + (a_1^2+a_2^2+\cdots+a_n^2)
+\]
+最後の項は$x$の値によらないので無視できる。
+残りの項は、$s=a_1+a_2+\cdots+a_n$とおくと
+$nx^2-2xs$と表せる。
+これは上に開いた放物線で、$x=0$と$x=2s/n$が根となる。
+そして最小値は$x=s/n$のときに得られるが、
+これは先ほど計算した平均値そのものである。
+
+\begin{comment}
 \section{Data compression}
 
 \index{data compression}
@@ -469,6 +771,36 @@ character & codeword \\
 \texttt{D} & 11 \\
 \end{tabular}
 \end{center}
+\end{comment}
+
+\section{データ圧縮}
+
+\index{data compression}
+\index{binary code}
+\index{codeword}
+
+\index{データ圧縮}
+\index{バイナリコード}
+\index{符号表}
+
+\key{バイナリコード}は 文字列を構成する個々の文字に、
+ビット列からなる\key{符号表}を割り当てる。
+ここで、文字列の個々の文字を符号表を用いて対応する
+バイナリコードに置き換えることで、文字列を圧縮できる。
+例えば、文字\texttt{A}–\texttt{D}に対し
+以下のようなバイナリコードの対応表があるとする:
+\begin{center}
+\begin{tabular}{rr}
+文字 & 符号 \\
+\hline
+\texttt{A} & 00 \\
+\texttt{B} & 01 \\
+\texttt{C} & 10 \\
+\texttt{D} & 11 \\
+\end{tabular}
+\end{center}
+
+\begin{comment}
 This is a \key{constant-length} code
 which means that the length of each
 codeword is the same.
@@ -496,6 +828,31 @@ character & codeword \\
 \texttt{D} & 111 \\
 \end{tabular}
 \end{center}
+\end{comment}
+
+各符号長は等しいため、これは\key{固定長}の符号と
+いうことになる。
+例えば、文字列\texttt{AABACDACA}は符号表により
+圧縮すると\[00\,00\,01\,00\,10\,11\,00\,10\,00\]となる。
+この符号表では、圧縮後の文字列は18ビットとなる。
+しかし、この文字列は各符号の長さにばらつきを許容する
+\key{可変長}の符号を用いることでより良く圧縮できる。
+頻繁に現れる文字に短い符号、稀にしか現れない文字に
+長い符号を割り当ててみる。
+すると、上記文字列に対応する\key{最適な}符号表は
+このようになる:
+\begin{center}
+\begin{tabular}{rr}
+文字 & 符号 \\
+\hline
+\texttt{A} & 0 \\
+\texttt{B} & 110 \\
+\texttt{C} & 10 \\
+\texttt{D} & 111 \\
+\end{tabular}
+\end{center}
+
+\begin{comment}
 An optimal code produces a compressed string
 that is as short as possible.
 In this case, the compressed string using
@@ -504,7 +861,17 @@ the optimal code is
 so only 15 bits are needed instead of 18 bits.
 Thus, thanks to a better code it was possible to
 save 3 bits in the compressed string.
+\end{comment}
 
+最適な符号表では、文字列をできるだけ短く圧縮する。
+この例では、圧縮後の文字列は
+\[0\,0\,110\,0\,10\,111\,0\,10\,0,\]
+であり、固定長の符号表では18ビットだった文字列が
+こちらではたった15ビットで済んでいる。
+つまり、より良い符号表により圧縮後の文字列が
+3ビット節約できている。
+
+\begin{comment}
 We require that no codeword
 is a prefix of another codeword.
 For example, it is not allowed that a code
@@ -529,7 +896,30 @@ character & codeword \\
 Using this code, it would not be possible to know
 if the compressed string 1011 corresponds to
 the string \texttt{AB} or the string \texttt{C}.
+\end{comment}
 
+この符号表において、ある符号が他の符号のprefixになっていてはならない。
+例えば、符号表に10と1011が混在してはならない。
+その理由は、圧縮後の文字列から元の文字列を復元可能で
+なければならないためである。
+もしある符号が他の符号のprefixだと、復元が正しく
+行えない場合が生じてしまう。
+例えば、以下の符号表は\emph{不正}である:
+\begin{center}
+\begin{tabular}{rr}
+文字 & 符号 \\
+\hline
+\texttt{A} & 10 \\
+\texttt{B} & 11 \\
+\texttt{C} & 1011 \\
+\texttt{D} & 111 \\
+\end{tabular}
+\end{center}
+この符号表では、圧縮後の文字列　1011から、
+元の文字列が\texttt{AB}と\texttt{C}のどちらであるか
+判断できない。
+
+\begin{comment}
 \index{Huffman coding}
 
 \subsubsection{Huffman coding}
@@ -547,7 +937,20 @@ by following a path from the root to
 the corresponding node.
 A move to the left corresponds to bit 0,
 and a move to the right corresponds to bit 1.
+\end{comment}
 
+\index{ハフマン符号}
+
+\subsubsection{ハフマン符号}
+
+\key{ハフマン符号}\footnote{D. A. Huffmanはこの手法を大学の授業の時間割を
+考えている時に発明し、1952にこのアルゴリズムを発表した \cite{huf52}。}
+は文字列に対し最適な符号表を生成する貪欲アルゴリズムである。
+このアルゴリズムは、文字列中の文字の登場頻度に応じ二分木を作る。
+そして各文字の符号は根から各文字に対応する頂点までのパスに対応付けられる。
+木を辿る過程で、二分木の左の子を辿るとき0、右の子を辿るとき1に対応付けられる。
+
+\begin{comment}
 Initially, each character of the string is
 represented by a node whose weight is the
 number of times the character occurs in the string.
@@ -562,6 +965,19 @@ the optimal code for the string
 \texttt{AABACDACA}.
 Initially, there are four nodes that correspond
 to the characters of the string:
+\end{comment}
+
+初期状態では、文字列中の各文字は単独の頂点を無し、
+その重さは文字列中の登場回数とする。
+１ステップごとに、重さが最少の頂点２つを選び、
+それら２つを子頂点とする親頂点を生成する。
+親頂点の重さは、子頂点の重さの和である。
+この処理を全頂点が連結するまで繰り返す。
+
+以下、ハフマン符号により文字列\texttt{AABACDACA}の
+符号表を作る過程を見ていこう。
+初期状態では、文字列中の文字に対応し
+以下の通り４つの頂点がある:.
 
 \begin{center}
 \begin{tikzpicture}[scale=0.9]
@@ -578,6 +994,8 @@ to the characters of the string:
 %\path[draw,thick,-] (4) -- (5);
 \end{tikzpicture}
 \end{center}
+
+\begin{comment}
 The node that represents character \texttt{A}
 has weight 5 because character \texttt{A}
 appears 5 times in the string.
@@ -588,6 +1006,17 @@ The first step is to combine the nodes that
 correspond to characters \texttt{B} and \texttt{D},
 both with weight 1.
 The result is:
+\end{comment}
+
+文字\texttt{A}に対応する頂点の重さは5である。
+というのも、文字\texttt{A}は文字列中で5回
+現れるためである。
+他の頂点の重さも同様に計算される。
+
+最初のステップでは、文字\texttt{B}と\texttt{D}に
+対応する頂点がともに重さが1で最小なので、
+それらを連結しよう。
+結果は下記のとおりである。
 \begin{center}
 \begin{tikzpicture}[scale=0.9]
 \node[draw, circle] (1) at (0,0) {$5$};
@@ -608,7 +1037,10 @@ The result is:
 \path[draw,thick,-] (4) -- (5);
 \end{tikzpicture}
 \end{center}
+\begin{comment}
 After this, the nodes with weight 2 are combined:
+\end{comment}
+次に、重さ2の頂点同士を連結する:
 \begin{center}
 \begin{tikzpicture}[scale=0.9]
 \node[draw, circle] (1) at (1,0) {$5$};
@@ -634,7 +1066,12 @@ After this, the nodes with weight 2 are combined:
 \path[draw,thick,-] (5) -- (6);
 \end{tikzpicture}
 \end{center}
+
+\begin{comment}
 Finally, the two remaining nodes are combined:
+\end{comment}
+
+最後に、残った２つの頂点を連結する:
 \begin{center}
 \begin{tikzpicture}[scale=0.9]
 \node[draw, circle] (1) at (2,2) {$5$};
@@ -666,11 +1103,26 @@ Finally, the two remaining nodes are combined:
 \end{tikzpicture}
 \end{center}
 
+\begin{comment}
 Now all nodes are in the tree, so the code is ready.
 The following codewords can be read from the tree:
 \begin{center}
 \begin{tabular}{rr}
 character & codeword \\
+\hline
+\texttt{A} & 0 \\
+\texttt{B} & 110 \\
+\texttt{C} & 10 \\
+\texttt{D} & 111 \\
+\end{tabular}
+\end{center}
+\end{comment}
+
+これで頂点はすべて単一の木を構成し、対応する符号表も完成した。
+この木より、以下の符号表が得られる:
+\begin{center}
+\begin{tabular}{rr}
+文字 & 符号 \\
 \hline
 \texttt{A} & 0 \\
 \texttt{B} & 110 \\
