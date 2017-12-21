@@ -23,7 +23,7 @@ about inventing an efficient algorithm.
 
 \key{アルゴリズムの設計}は問題の解決と数学的な思考からなる。
 それには問題を分析し、創造的に解くスキルが求められる。
-問題を解くアルゴリズムには、正確かつ効率的でなければならない。
+問題を解くアルゴリズムとは、正確かつ効率的でなければならない。
 そして問題の中核は、しばしば効率的なアルゴリズムを考案することとなる。
 
 
@@ -39,7 +39,9 @@ of algorithms.
 \end{comment}
 
 もちろん競技プログラマにはアルゴリズムの理論的な知識は重要である。
-一般的に、問題の解法はよく知られたテクニックと、新たな洞察の組み合わせである。
+一般的に問題の解法とは、よく知られたテクニックと、新たな洞察の組み合わせである。
+競技プログラミングで現れる様々なテクニックは、アルゴリズムの科学的な
+研究における基礎を形作るものともなるだろう。
 
 \begin{comment}
 The \key{implementation of algorithms} requires good
@@ -62,11 +64,6 @@ straightforward and concise.
 Programs should be written quickly,
 because there is not much time available.
 Unlike in traditional software engineering,
-<<<<<<< HEAD
-the programs are short (usually at most a few
-hundred lines of code), and they do not need to 
-be maintained after the contest.
-=======
 the programs are short (usually at most some
 hundreds of lines) and it is not needed to 
 maintain them after the contest.
@@ -76,7 +73,7 @@ maintain them after the contest.
 時間が限られているため、プログラムは素早く書かれなければならない。
 一般的なソフトウェア開発と異なり、コードは短く（通常多くて数百行）で、コンテスト後は
 継続的なメンテナンスは不要である。
->>>>>>> Translated 1.1, 1.2.
+
 
 \begin{comment}
 \section{Programming languages}
@@ -135,8 +132,8 @@ using a specific programming language
 is not an unfair advantage.
 \end{comment}
 
-一方、複数の言語を使いこなせるようになり、長短を理解することも重要である。
-例えば大きな整数を扱う必要がある場合、Pythonはビルトインで多倍長整数演算をサポートしているため、よい選択肢である。
+一方、複数の言語を使いこなし、長短を理解できるようになることも重要である。
+例えば大きな整数を扱う必要がある場合、ビルトインで多倍長整数演算をサポートしているPythonはよい選択肢である。
 ただし、多くの問題は特定言語が不公平に有利になるようには設定されない。
 
 
@@ -152,7 +149,7 @@ now is a good time to start learning.
 
 本書のプログラムはすべてC++で書かれており、標準ライブラリの機能を用いる。
 C++のバージョンは、現在ほとんどのコンテストで利用可能であるC++11標準に従う。
-あなたがC++をまだ利用できないなら、今は勉強するよい機会だ。
+あなたがまだC++によるプログラミングができないなら、今こそ勉強するよい機会だ。
 
 \begin{comment}
 \subsubsection{C++ code template}
@@ -436,11 +433,11 @@ After this, the program reads the input from the file
 The most used integer type in competitive programming
 is \texttt{int}, which is a 32-bit type with
 a value range of $-2^{31} \ldots 2^{31}-1$
-or about $-2 \cdot 10^9 \ldots 2 \cdot 10^9$.
+or about $-2 \times 10^9 \ldots 2 \times 10^9$.
 If the type \texttt{int} is not enough,
 the 64-bit type \texttt{long long} can be used.
 It has a value range of $-2^{63} \ldots 2^{63}-1$
-or about $-9 \cdot 10^{18} \ldots 9 \cdot 10^{18}$.
+or about $-9 \times 10^{18} \ldots 9 \times 10^{18}$.
 
 The following code defines a
 \texttt{long long} variable:
@@ -458,9 +455,9 @@ a subtle error:
 \end{comment}
 
 競技プログラミングで最も使われる整数（\key{integer}）型は\texttt{int}型である。
-この型は32bit長で、$-2^{31} \ldots 2^{31}-1$、すなわち約$-2 \cdot 10^9 \ldots 2 \cdot 10^9$の範囲の整数を表せる。
+この型は32bit長で、$-2^{31} \ldots 2^{31}-1$、すなわち約$-2 \times 10^9 \ldots 2 \times 10^9$の範囲の整数を表せる。
 \texttt{int}型で不足するならば64bit型の\texttt{long long}を利用できる。
-こちらは$-2^{63} \ldots 2^{63}-1$、すなわち約$-9 \cdot 10^{18} \ldots 9 \cdot 10^{18}$の範囲の整数を表せる。
+こちらは$-2^{63} \ldots 2^{63}-1$、すなわち約$-9 \times 10^{18} \ldots 9 \times 10^{18}$の範囲の整数を表せる。
 
 以下のコードは\texttt{long long}型変数を定義する:
 \begin{lstlisting}
@@ -499,7 +496,7 @@ However, this type is not available in all contest systems.
 \end{comment}
 
 変数\texttt{b}は\texttt{long long}型であるが、式\texttt{a*a}中の数はいずれも
-\texttt{int}型であり、演算結果も\texttt{int}同様に型となる。
+\texttt{int}型であり、演算結果も同様に\texttt{int}型となる。
 そのため変数\texttt{b}は誤った結果を含む。
 この問題は、変数\texttt{a}を\texttt{long long}型にするか、式を
 キャストを用いて\texttt{(long long)a*a}に書き換えることで解決できる。
@@ -541,7 +538,7 @@ it suffices to use the types
 \end{comment}
 
 $x \bmod m$を$x$を$m$で割ったときの余りとして定義する。
-例えば$17 = 3 \cdot 5 + 2$なので$17 \bmod 5 = 2$である。
+例えば$17 = 3 \times 5 + 2$なので$17 \bmod 5 = 2$である。
 
 しばしば解が非常に大きな数値になる問題において、
 $m$の剰余を答えるよう指示されることがある。
@@ -737,8 +734,8 @@ shorter names for datatypes and other parts of code.
 
 \section{コードの短縮}
 
-競技プログラミングにおいては、プログラムをできるだけ素早く書くため、短いコードは利用的である。
-そのため競技プログラマはしばしば型名やその他の部分で短い別名を使う。
+プログラムをできるだけ素早く書くため、競技プログラミングにおいて短いコードは理想的である。
+そのため競技プログラマは、しばしば型名やその他の部分で短い別名を使う。
 
 \begin{comment}
 \subsubsection{Type names}
@@ -984,8 +981,8 @@ are needed later in the book.
 \section{数学}
 
 数学は競技プログラミングにおける重要な素養であり、
-それなしに競技プログラミングで成功することはできない。
-この章では、本書で以後登場する数学の重要な概念と公式について論ずる。
+競技プログラミングで成功するための必須スキルである。
+この章では、本書で以後登場する数学の重要な概念や公式について論ずる。
 
 \begin{comment}
 \subsubsection{Sum formulas}
@@ -1044,7 +1041,7 @@ the value of each number is $(a+b)/2$ on average.
 \[3, 7, 11, 15\]
 は公差4の等差数列である。
 等差数列の総和は下記の式で計算できる:
-\[\underbrace{a + \cdots + b}_{n \,\, \textrm{numbers}} = \frac{n(a+b)}{2}\]
+\[\underbrace{a + \cdots + b}_{n \,\, \textrm{要素}} = \frac{n(a+b)}{2}\]
 
 $a$は初項、$b$は最後の項、$n$は要素数を示す。
 例えば
@@ -1078,7 +1075,7 @@ For example,
 \[a + ak + ak^2 + \cdots + b = \frac{bk-a}{k-1}\]
 $a$は初項、$b$は最後の項、$k$は公比を示す。
 例えば
-\[3+6+12+24=\frac{24 \cdot 2 - 3}{2-1} = 45.\]
+\[3+6+12+24=\frac{24 \times 2 - 3}{2-1} = 45.\]
 となる。
 
 \begin{comment}
@@ -1133,7 +1130,7 @@ and the value of each part is at most 1.
 例えば$n=6$において、この調和級数は以下のようになる:
 \[ 1+\frac{1}{2}+\frac{1}{3}+\frac{1}{4}+\frac{1}{5}+\frac{1}{6} \le
 1+\frac{1}{2}+\frac{1}{2}+\frac{1}{4}+\frac{1}{4}+\frac{1}{4}.\]
-この上界は$\log_2(n)+1$個の部分に分けられ($1$, $2 \cdot 1/2$, $4 \cdot 1/4$, 以下同様)、個々の総和は1以下である。
+この上界は$\log_2(n)+1$個の部分に分けられ($1$, $2 \times 1/2$, $4 \times 1/4$, 以下同様)、個々の総和は1以下である。
 ,
 
 \begin{comment}
@@ -1190,7 +1187,7 @@ For example, in the above set
 
 集合$S$が要素$x$を含むことを、$x \in S$と表し、そうでない場合$x \notin S$と表す。
 例えば上記集合において
-\[4 \in X \hspace{10pt}\textrm{and}\hspace{10pt} 5 \notin X.\]
+\[ 4 \in X \hspace{10pt}\textrm{かつ}\hspace{10pt} 5 \notin X \] である.
 
 \begin{samepage}
 
@@ -1257,7 +1254,7 @@ $A$の各要素が$S$にも含まれている場合、$A$を$S$の部分集合�
 例えば集合$\{2,4,7\}$の部分集合は下記のとおりである:
 \begin{center}
 $\emptyset$,
-$\{2\}$, $\{4\}$, $\{7\}$, $\{2,4\}$, $\{2,7\}$, $\{4,7\}$ and $\{2,4,7\}$.
+$\{2\}$, $\{4\}$, $\{7\}$, $\{2,4\}$, $\{2,7\}$, $\{4,7\}$ および $\{2,4,7\}$.
 \end{center}
 
 \begin{comment}
@@ -1365,7 +1362,7 @@ The expression $A \Leftrightarrow B$ is true
 if $A$ and $B$ are both true or both false.
 \end{comment}
 
-式$\lnot A$が$A$と反対の値を返す。
+式$\lnot A$は、$A$と反対の値を返す。
 式$A \land B$は、$A$と$B$両方が真の場合のみ真である。
 式$A \lor B$ は、$A$と$B$いずれかもしくは両方が真の場合に真である。
 式$A \Rightarrow B$ は、$A$が真の場合に$B$も真であれば真である。
@@ -1455,12 +1452,12 @@ For example,
 関数$\lfloor x \rfloor$は実数$x$からそれを超えない最大の整数に変換し、
 関数$\lceil x \rceil$は実数$x$からそれ以上の最小の整数に変換する。
 例えば下記の通り:
-\[ \lfloor 3/2 \rfloor = 1 \hspace{10pt} \textrm{and} \hspace{10pt} \lceil 3/2 \rceil = 2.\]
+\[ \lfloor 3/2 \rfloor = 1 \hspace{10pt} \textrm{および} \hspace{10pt} \lceil 3/2 \rceil = 2.\]
 
 関数$\min(x_1,x_2,\ldots,x_n)$や$\max(x_1,x_2,\ldots,x_n)$は
 値$x_1,x_2,\ldots,x_n$のうち最小もしくは最大値を取り出す。
 例えば下記の通り:
-\[ \min(1,2,3)=1 \hspace{10pt} \textrm{and} \hspace{10pt} \max(1,2,3)=3.\]
+\[ \min(1,2,3)=1 \hspace{10pt} \textrm{および} \hspace{10pt} \max(1,2,3)=3.\]
 
 \index{factorial}
 \index{階乗}
@@ -1469,16 +1466,23 @@ For example,
 The \key{factorial} $n!$ can be defined
 \[\prod_{x=1}^n x = 1 \cdot 2 \cdot 3 \cdot \ldots \cdot n\]
 or recursively
-\end{comment}
-
-階乗(\key{factorial}) $n!$は下記の通り定義できる:
-\[\prod_{x=1}^n x = 1 \cdot 2 \cdot 3 \cdot \ldots \cdot n\]
-もしくは再帰的な定義もできる:
 
 \[
 \begin{array}{lcl}
 0! & = & 1 \\
 n! & = & n \cdot (n-1)! \\
+\end{array}
+\]
+\end{comment}
+
+階乗(\key{factorial}) $n!$は下記の通り定義できる:
+\[\prod_{x=1}^n x = 1 \times 2 \times 3 \times \ldots \times n\]
+もしくは再帰的な定義もできる:
+
+\[
+\begin{array}{lcl}
+0! & = & 1 \\
+n! & = & n \times (n-1)! \\
 \end{array}
 \]
 
@@ -1665,8 +1669,8 @@ the Asia-Pacific Informatics Olympiad (APIO)がある。
 
 一部の国では将来のIOI選手に向け練習用のオンラインコンテストを
 実施している。
-例えばthe Croatian Open Competition in Informatics \cite{coci}や
-and the USA Computing Olympiad \cite{usaco}がある。
+例えばCroatian Open Competition in Informatics \cite{coci}や
+USA Computing Olympiad \cite{usaco}がある。
 加えて、大量の問題セットからなるポーランドのコンテストサイトも利用できる\cite{main}。
 
 \subsubsection{ICPC}
