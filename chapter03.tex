@@ -23,7 +23,7 @@ Also, the problem ''what is the most frequent element
 in an array?'' can be solved similarly.
 \end{comment}
 
-ソート（\key{Sorting}）は基本的なアルゴリズム設計の問題である。
+ソート（\key{Sorting}）はアルゴリズム設計における基本的な問題である。
 データがソート済みだと処理が容易になることはよくあることなので、
 多くの効率的なアルゴリズムがソートを内部に含んでいる。
 
@@ -453,7 +453,7 @@ as follows:
 \end{comment}
 
 両部分列は、再帰的にこのようにソートされる:
-as follows:
+
 \begin{center}
 \begin{tikzpicture}[scale=0.7]
 \draw (0,0) grid (4,1);
@@ -571,7 +571,7 @@ $x<y$であれば手続きは左側、そうでなければ右側に遷移し、
 右辺の$n$項のうち、後半$n/2$項を$\log_2(n/2)$に置き換えると、
 この式の下限がわかる。
 この式変形より
-\[ \log_2(n!) \ge (n/2) \cdot \log_2(n/2),\]
+\[ \log_2(n!) \ge (n/2) \times \log_2(n/2),\]
 の関係がわかる。
 よって木の高さ、すなわち2要素の最小比較回数が最悪$n \log n$回に
 なることがわかる。
@@ -959,8 +959,8 @@ by alphabetical order:
 \texttt{sort}関数は、外部からコールバック関数として比較関数(\key{comparison function})
 を渡すことができる。
 例えば以下のような比較関数\texttt{comp}を使うと、
-文字列をまつ長さでソートし、同着なら次に辞書順で比較する
-といいうようなソートができる:
+文字列をまず長さでソートし、同着なら次に辞書順で比較する
+というようなソートができる:
 
 \begin{lstlisting}
 bool comp(string a, string b) {
@@ -1025,7 +1025,7 @@ efficiently searches for an element in a sorted array
 in $O(\log n)$ time.
 \end{comment}
 
-\begin{comment}
+
 このアプローチは最悪ケースでは数列の全要素をチェックするので、
 時間計算量は$O(n)$となる。
 数列の要素の並びに特徴がなく、他の追加情報がないという前提では、
@@ -1034,9 +1034,9 @@ in $O(\log n)$ time.
 しかし、数列が\emph{ソート済み}である場合、事情が異なる。
 その場合、検索過程で要素の並びにより追加情報を得られるため、
 検索を高速化できる。
-以下の二分探索(\key{binary search)アルゴリズムは、
+以下の二分探索(\key{binary search})アルゴリズムは、
 ソート済み配列からデータを$O(\log n)$で効率的に検索できる。
-\end{comment}
+
 
 \begin{comment}
 \subsubsection{Method 1}
@@ -1344,6 +1344,12 @@ Binary search can also be used to find
 the maximum value for a function that is
 first increasing and then decreasing.
 Our task is to find a position $k$ such that
+\begin{itemize}
+\item
+$f(x)<f(x+1)$ when $x<k$, and
+\item
+$f(x)>f(x+1)$ when $x \ge k$.
+\end{itemize}
 \end{comment}
 
 \subsubsection{最大値の探索}
@@ -1354,9 +1360,9 @@ Our task is to find a position $k$ such that
 
 \begin{itemize}
 \item
-$f(x)<f(x+1)$ when $x<k$, and
+$x<k$ のとき $f(x)<f(x+1)$
 \item
-$f(x)>f(x+1)$ when $x \ge k$.
+$x \ge k$ のとき $f(x)>f(x+1)$
 \end{itemize}
 
 \begin{comment}
