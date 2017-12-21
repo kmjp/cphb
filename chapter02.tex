@@ -410,17 +410,14 @@ $(3,1,2)$ and $(3,2,1)$.
 
 平方根時間（\key{square root algorithm}）アルゴリズムは$O(\log n)$より遅いが$O(n)$より速い。
 平方根の特性として$\sqrt n = n/\sqrt n$が成り立つ。
-よって平方根$\sqrt n$はある意味入力の中央である。
-（訳注：''so the square root $\sqrt n$ lies,
-in some sense, in the middle of the input.''の
-良い訳がわかりませんでした）
+よって平方根$\sqrt n$はある意味では入力の中央値と言える。
 
 \item[$O(n)$]
 \index{linear algorithm}
 \index{線形時間アルゴリズム}
 
 線形時間（\key{linear}）アルゴリズムは、入力を定数回辿るようなアルゴリズムである。
-これはしばしばありうる最前のアルゴリズムである。
+これはしばしばありうる最善のアルゴリズムである。
 なぜなら、解を出力する前に通常は全入力データを一旦読み込む時点で、
 $O(n)$となるためである。
 
@@ -649,7 +646,7 @@ For example, in the array
 
 $n$要素の数列に対し、最大部分列和（\key{maximum subarray sum}）を求めることを考える。
 最大部分列和とは、数列中のある連続した値の和として取りえる最大値である。
-\footnote{J. Bentley's　book \emph{Programming Pearls} \cite{ben86} でこの問題が有名になった。}
+\footnote{J. Bentleyの書籍 \emph{Programming Pearls} \cite{ben86} でこの問題が有名になった。}
 この問題は、数列中に負の値があるときに興味深いものとなる。
 例えば数列が以下の図のようになっているとする:
 \begin{center}
