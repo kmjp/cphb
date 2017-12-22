@@ -21,12 +21,12 @@ dynamic programming, may be needed.
 \chapter{全探索}
 
 全探索（\key{Complete search}）はほとんどのアルゴリズムの
-問題を解くことができる汎用の手段である。
+問題を解くことができる手段である。
 そのアイデアは、あり得る可能性を総当たりですべて列挙し、
 その中で問題に応じて最適値を求めたり組み合わせの総数を
-求める。
+求めたりするというものである。
 
-全探索は一般的に実装が容易で正しい解にたどり着きやすいため、
+全探索は一般的に実装が容易であり、かつ正しい解にたどり着きやすいため、
 十分な時間があるならば良いテクニックである。
 全探索では遅すぎる場合は、別のテクニック、例えば
 貪欲法なり動的計画法なりが必要となる。
@@ -596,17 +596,11 @@ There is only one way to place the two remaining queens.
 \end{comment}
 
 
-最下段において、先頭の３つの構成はクイーンが互いに互いを攻撃できるため無効である。
+図における最下段の４通りの例において、先頭の３つの構成はクイーンが互いに互いを攻撃できるため無効である。
 しかし４つ目の構成は有効であり、残り２つのクイーンを置いていくと完全な解まで探索を
 拡張できる。
 残り２つのクイーンの置き方は一通りしかない。
 
-At the bottom level, the three first configurations
-are illegal, because the queens attack each other.
-However, the fourth configuration is valid
-and it can be extended to a complete solution by
-placing two more queens to the board.
-There is only one way to place the two remaining queens.
 
 \begin{samepage}
 
@@ -852,8 +846,8 @@ One of the paths is as follows:
 \section{探索の枝刈り}
 
 しばしば探索木を枝刈りすることで、バックトラッキングの最適化が可能である。
-そのアイデアは、アルゴリズムに知性を加え、今の探索を継続しても求める解に
-たどり着きそうにない場合、できるだけ早く気づけるようにすることである。
+そのアイデアは、アルゴリズムに判断を加え、今の探索を継続しても求める解に
+たどり着きそうにない場合、できるだけ早く気づき探索を打ち切ることである。
 このような最適化は探索の効率に著しく影響する場合がある。
 
 ここで、$n \times n$のグリッドにおいて、
