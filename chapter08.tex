@@ -520,7 +520,7 @@ As an example, consider the following array:
 
 配列を左から右に辿っていき、同時に配列要素からなるスタックを管理して以降。
 配列の各位置において、スタックの最上位が自身の値より小さいか空になるまで
-最上位をpopすることを繰り返して以降。
+最上位をpopすることを繰り返していこう。
 そうすると、スタックに残った最上位の値が現在の要素に最も近いより小さい値となる。
 その後、自身をスタックに積む。
 
@@ -622,9 +622,6 @@ its nearest smaller element is 2:
 次の要素5は、スタックの最上位である2より大きい。
 そのため5がスタックに積まれる。
 5に最も近いより小さい値は2となる:
-Then, the element 5 is larger than the element 2,
-so it will be added to the stack, and
-its nearest smaller element is 2:
 \begin{center}
 \begin{tikzpicture}[scale=0.7]
 \fill[color=lightgray] (4,0) rectangle (5,1);
